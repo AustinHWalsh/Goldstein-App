@@ -1,5 +1,8 @@
 # Goldstein-App
 
+App of Goldstein College
+Austin Walsh - 2020
+
 # Plans:
 
 1. Features
