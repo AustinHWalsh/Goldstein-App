@@ -15,6 +15,10 @@ Developed by Austin Walsh - 2020
     Contains all upcoming events  
     Information about those events  
     Different colours for different event types?  
+- Dino Meals
+    Info for the week
+    Updated weekly
+    Need to figure out how to get dino info (check with basserbot)
 - Editable in app (login)  
     Universal password - easily changable  
     Login button somewhere  
