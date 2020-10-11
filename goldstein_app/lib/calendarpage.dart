@@ -28,6 +28,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _selectedEvents = _events[_selectedDay] ?? [];
     _controller = CalendarController();
     _eventController = TextEditingController();
+    clearOldEvents();
     initPrefs();
   }
 
@@ -35,9 +36,27 @@ class _CalendarPageState extends State<CalendarPage> {
   initPrefs() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      _events = Map<DateTime, List<dynamic>>.from(
-          decodeMap(json.decode(prefs.getString("events") ?? "{}")));
+      for (String key in prefs.getKeys()) {
+        Map<DateTime, dynamic> currMonth =
+            decodeMap(json.decode(prefs.getString(key)));
+        currMonth.forEach((currKey, value) {
+          _events[currKey] = value;
+        });
+      }
     });
+  }
+
+  // Clear preferences that are from a month before the current one
+  clearOldEvents() async {
+    var _currentYM = int.parse(
+        DateTime.now().year.toString() + DateTime.now().month.toString());
+    prefs = await SharedPreferences.getInstance();
+    for (String key in prefs.getKeys()) {
+      var currentEvent = int.parse(key);
+      if (currentEvent < _currentYM) {
+        prefs.remove(key);
+      }
+    }
   }
 
   // Covert a map of DateTimes to a map of strings and return it
@@ -189,7 +208,10 @@ class _CalendarPageState extends State<CalendarPage> {
                   } else {
                     _events[_controller.selectedDay] = [_eventController.text];
                   }
-                  prefs.setString("events", json.encode(encodeMap(_events)));
+                  var _currYM = _controller.selectedDay.year.toString() +
+                      _controller.selectedDay.month.toString();
+
+                  prefs.setString(_currYM, json.encode(encodeMap(_events)));
                   _eventController.clear();
                   Navigator.pop(context);
                 });
