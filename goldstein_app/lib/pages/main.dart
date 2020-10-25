@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'leftmenu.dart';
+import 'package:goldstein_app/leftmenu.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "252127424317",
+    "firebase_url": "https://goldstein-app.firebaseio.com",
+    "project_id": "goldstein-app",
+    "storage_bucket": "goldstein-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252127424317:android:ea0452635018247ef21f54",
+        "android_client_info": {
+          "package_name": "com.goldstein.goldstein_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252127424317-tfg1ofsvc29l294d51mns7skcd9p1pvo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQvQavf7VkvFrfWdJ8ovUQjngDdgsz5dI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252127424317-tfg1ofsvc29l294d51mns7skcd9p1pvo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

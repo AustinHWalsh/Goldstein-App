@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'main.dart';
-import 'calendarpage.dart';
+import 'package:goldstein_app/pages/main.dart';
+import 'package:goldstein_app/pages/calendarpage.dart';
 
 // Drawer Menu located on left side of screen
 class LeftMenu extends StatefulWidget {

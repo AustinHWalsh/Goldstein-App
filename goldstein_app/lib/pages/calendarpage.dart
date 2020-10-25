@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'leftmenu.dart';
+import 'package:goldstein_app/leftmenu.dart';
 
 // Calendar Page that holds the calendar and all events located then
 class CalendarPage extends StatefulWidget {
@@ -48,11 +48,10 @@ class _CalendarPageState extends State<CalendarPage> {
 
   // Clear preferences that are from a month before the current one
   clearOldEvents() async {
-    var _currentYM = int.parse(
-        DateTime.now().year.toString() + DateTime.now().month.toString());
+    final _currentYM = int.parse(currentYM(DateTime.now()));
     prefs = await SharedPreferences.getInstance();
     for (String key in prefs.getKeys()) {
-      var currentEvent = int.parse(key);
+      final currentEvent = int.parse(key);
       if (currentEvent < _currentYM) {
         prefs.remove(key);
       }
@@ -208,8 +207,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   } else {
                     _events[_controller.selectedDay] = [_eventController.text];
                   }
-                  var _currYM = _controller.selectedDay.year.toString() +
-                      _controller.selectedDay.month.toString();
+                  final _currYM = currentYM(_controller.selectedDay);
 
                   prefs.setString(_currYM, json.encode(encodeMap(_events)));
                   _eventController.clear();
@@ -220,5 +218,14 @@ class _CalendarPageState extends State<CalendarPage> {
         ],
       ),
     );
+  }
+
+  currentYM(DateTime date) {
+    final year = date.year.toString();
+    final month = date.month;
+    if (month < 10) {
+      return (year + "0" + month.toString());
+    }
+    return year + month.toString();
   }
 }
