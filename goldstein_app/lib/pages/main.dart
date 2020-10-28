@@ -54,8 +54,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '	\u{1F984}',
-              style: TextStyle(fontSize: 100),
+              'Homepage',
             ),
           ],
         ),

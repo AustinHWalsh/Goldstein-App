@@ -57,7 +57,9 @@ class _CalendarPageState extends State<CalendarPage> {
                 _selectedEvents = [];
               }
             }
-            return _openCalendar();
+            var isPortrait =
+                MediaQuery.of(context).orientation == Orientation.portrait;
+            return _openCalendar(isPortrait);
           }),
       drawer: LeftMenu(),
     );
@@ -65,12 +67,12 @@ class _CalendarPageState extends State<CalendarPage> {
 
   // Push the calendar page onto the stack
   // Opens the calendar
-  Widget _openCalendar() {
+  Widget _openCalendar(bool isPortrait) {
     return Scaffold(
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          _buildCalendar(),
+          _buildCalendar(isPortrait),
           const SizedBox(height: 8.0),
           const SizedBox(height: 8.0),
           Expanded(child: _buildEventList()),
@@ -85,8 +87,10 @@ class _CalendarPageState extends State<CalendarPage> {
 
   // Builds the calendar, used to change the style of the calendar
   // At any time
-  Widget _buildCalendar() {
+  Widget _buildCalendar(bool isPortrait) {
     return TableCalendar(
+      initialCalendarFormat: _calendarFormats(isPortrait),
+      availableCalendarFormats: _calendarLayout(isPortrait),
       events: _events,
       calendarController: _controller,
       startingDayOfWeek: StartingDayOfWeek.monday,
@@ -168,5 +172,21 @@ class _CalendarPageState extends State<CalendarPage> {
               ))
           .toList(),
     );
+  }
+
+  // Returns a corresponding map of avaliable formats to ensure the
+  // calendar correctly fits on the page
+  Map<CalendarFormat, String> _calendarLayout(bool isPortrait) {
+    if (isPortrait) return const {CalendarFormat.month: "Month"};
+    print(CalendarFormat.week);
+    return const {CalendarFormat.week: "Week"};
+  }
+
+  // Returns a calendar format for the inital format depending
+  // if the phone is portrait or landscape
+  CalendarFormat _calendarFormats(bool isPortrait) {
+    if (isPortrait) return CalendarFormat.month;
+    print(CalendarFormat.week);
+    return CalendarFormat.week;
   }
 }
