@@ -1,10 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:goldstein_app/events/event.dart';
+import 'package:goldstein_app/events/event_firestore_service.dart';
+import 'package:goldstein_app/ui/view_event.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:goldstein_app/leftmenu.dart';
+import 'package:goldstein_app/ui/leftmenu.dart';
 
 // Calendar Page that holds the calendar and all events located then
 class CalendarPage extends StatefulWidget {
@@ -14,112 +14,52 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   Map<DateTime, List<dynamic>> _events;
-  List _selectedEvents;
+  List<dynamic> _selectedEvents;
   CalendarController _controller;
-  TextEditingController _eventController;
-  SharedPreferences prefs;
 
   // Initialise variables and events
   @override
   void initState() {
     super.initState();
-    final _selectedDay = DateTime.now();
     _events = {};
-    _selectedEvents = _events[_selectedDay] ?? [];
+    _selectedEvents = [];
     _controller = CalendarController();
-    _eventController = TextEditingController();
-    clearOldEvents();
-    initPrefs();
   }
 
-  // Initialise the instance of events
-  initPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      for (String key in prefs.getKeys()) {
-        Map<DateTime, dynamic> currMonth =
-            decodeMap(json.decode(prefs.getString(key)));
-        currMonth.forEach((currKey, value) {
-          _events[currKey] = value;
-        });
-      }
+  // Groups the persistent events so they can be displayed
+  Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> allEvents) {
+    Map<DateTime, List<dynamic>> data = {};
+    allEvents.forEach((event) {
+      DateTime date = DateTime(
+          event.eventDate.year, event.eventDate.month, event.eventDate.day, 12);
+      if (data[date] == null) data[date] = [];
+      data[date].add(event);
     });
-  }
-
-  // Clear preferences that are from a month before the current one
-  clearOldEvents() async {
-    final _currentYM = int.parse(currentYM(DateTime.now()));
-    prefs = await SharedPreferences.getInstance();
-    for (String key in prefs.getKeys()) {
-      final currentEvent = int.parse(key);
-      if (currentEvent < _currentYM) {
-        prefs.remove(key);
-      }
-    }
-  }
-
-  // Covert a map of DateTimes to a map of strings and return it
-  Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
-    Map<String, dynamic> newMap = {};
-    map.forEach((key, value) {
-      newMap[key.toString()] = map[key];
-    });
-    return newMap;
-  }
-
-  // Covert a map of Strings to a map of DateTimes and return it
-  Map<DateTime, dynamic> decodeMap(Map<String, dynamic> map) {
-    Map<DateTime, dynamic> newMap = {};
-    map.forEach((key, value) {
-      newMap[DateTime.parse(key)] = map[key];
-    });
-    return newMap;
+    return data;
   }
 
   // Build the calendar page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Calendar"),
-        ),
-        body: Center(
-          child: _openCalendar(),
-        ),
-        drawer: LeftMenu());
-  }
-
-  // Builds the calendar, used to change the style of the calendar
-  // At any time
-  Widget _buildCalendar() {
-    return TableCalendar(
-      calendarController: _controller,
-      events: _events,
-      startingDayOfWeek: StartingDayOfWeek.monday,
-      calendarStyle:
-          CalendarStyle(outsideDaysVisible: false, markersColor: Colors.blue),
-      headerStyle:
-          HeaderStyle(centerHeaderTitle: true, formatButtonVisible: false),
-      builders: CalendarBuilders(
-        markersBuilder: (context, date, events, holidays) {
-          final children = <Widget>[];
-          if (events.isNotEmpty) {
-            children.add(
-              Positioned(
-                right: 1,
-                bottom: 1,
-                child: _buildEventsMarker(date, events),
-              ),
-            );
-          }
-          return children;
-        },
+      appBar: AppBar(
+        title: Text("Calendar"),
       ),
-      onDaySelected: (date, events) {
-        setState(() {
-          _selectedEvents = events;
-        });
-      },
+      body: StreamBuilder<List<EventModel>>(
+          stream: eventDBS.streamList(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<EventModel> allEvents = snapshot.data;
+              if (allEvents.isNotEmpty) {
+                _events = _groupEvents(allEvents);
+              } else {
+                _events = {};
+                _selectedEvents = [];
+              }
+            }
+            return _openCalendar();
+          }),
+      drawer: LeftMenu(),
     );
   }
 
@@ -138,7 +78,41 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: _showAddDialog,
+        onPressed: () => Navigator.pushNamed(context, 'add_event'),
+      ),
+    );
+  }
+
+  // Builds the calendar, used to change the style of the calendar
+  // At any time
+  Widget _buildCalendar() {
+    return TableCalendar(
+      events: _events,
+      calendarController: _controller,
+      startingDayOfWeek: StartingDayOfWeek.monday,
+      calendarStyle:
+          CalendarStyle(outsideDaysVisible: false, markersColor: Colors.blue),
+      headerStyle:
+          HeaderStyle(centerHeaderTitle: true, formatButtonVisible: false),
+      onDaySelected: (date, events) {
+        setState(() {
+          _selectedEvents = events;
+        });
+      },
+      builders: CalendarBuilders(
+        markersBuilder: (context, date, events, holidays) {
+          final children = <Widget>[];
+          if (events.isNotEmpty) {
+            children.add(
+              Positioned(
+                right: 1,
+                bottom: 1,
+                child: _buildEventsMarker(date, events),
+              ),
+            );
+          }
+          return children;
+        },
       ),
     );
   }
@@ -181,51 +155,18 @@ class _CalendarPageState extends State<CalendarPage> {
                 margin:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: ListTile(
-                  title: Text(event.toString()),
-                  onTap: () => print('$event tapped!'),
+                  title: Text(event.title.toString()),
+                  onTap: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => EventDetailsPage(
+                                  event: event,
+                                )))
+                  },
                 ),
               ))
           .toList(),
     );
-  }
-
-  // Creates an event for a specified day by clicking the plus
-  _showAddDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: TextField(
-          controller: _eventController,
-        ),
-        actions: <Widget>[
-          FlatButton(
-              onPressed: () {
-                if (_eventController.text.isEmpty) return;
-                setState(() {
-                  if (_events[_controller.selectedDay] != null) {
-                    _events[_controller.selectedDay].add(_eventController.text);
-                  } else {
-                    _events[_controller.selectedDay] = [_eventController.text];
-                  }
-                  final _currYM = currentYM(_controller.selectedDay);
-
-                  prefs.setString(_currYM, json.encode(encodeMap(_events)));
-                  _eventController.clear();
-                  Navigator.pop(context);
-                });
-              },
-              child: Text("Add"))
-        ],
-      ),
-    );
-  }
-
-  currentYM(DateTime date) {
-    final year = date.year.toString();
-    final month = date.month;
-    if (month < 10) {
-      return (year + "0" + month.toString());
-    }
-    return year + month.toString();
   }
 }

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
+//import 'package:intl/date_symbol_data_local.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-import 'package:goldstein_app/leftmenu.dart';
+import 'package:goldstein_app/ui/leftmenu.dart';
+import 'package:goldstein_app/ui/add_event.dart';
+//import 'package:goldstein_app/ui/view_event.dart';
+//import 'package:goldstein_app/events/event_firestore_service.dart';
 
-void main() {
-  initializeDateFormatting().then((_) => runApp(MyApp()));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -18,6 +25,9 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomePage(title: 'Goldstein College'),
+      routes: {
+        "add_event": (_) => AddEventPage(),
+      },
     );
   }
 }
