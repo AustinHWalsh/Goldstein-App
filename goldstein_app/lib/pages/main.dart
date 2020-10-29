@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
-import 'package:goldstein_app/ui/add_event.dart';
+import 'package:goldstein_app/pages/add_event.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

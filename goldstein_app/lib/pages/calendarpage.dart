@@ -3,7 +3,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 import 'package:goldstein_app/events/event.dart';
 import 'package:goldstein_app/events/event_firestore_service.dart';
-import 'package:goldstein_app/ui/view_event.dart';
+import 'package:goldstein_app/pages/view_event.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
 
 // Calendar Page that holds the calendar and all events located then
@@ -45,7 +45,6 @@ class _CalendarPageState extends State<CalendarPage> {
   // Build the calendar page
   @override
   Widget build(BuildContext context) {
-    //WidgetsBinding.instance.addPostFrameCallback((_) => _buildEventList());
     return Scaffold(
       appBar: AppBar(
         title: Text("Calendar"),

@@ -25,13 +25,4 @@ class EventModel extends DatabaseService {
       eventDate: data['event_date'].toDate(),
     );
   }
-
-  Map<String, dynamic> toAMap() {
-    return {
-      "title": title,
-      "description": description,
-      "event_date": eventDate,
-      "id": id,
-    };
-  }
 }
