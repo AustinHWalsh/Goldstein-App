@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 import 'package:goldstein_app/pages/main.dart';
 import 'package:goldstein_app/pages/calendarpage.dart';
 
@@ -49,8 +49,9 @@ class _LeftMenuState extends State<LeftMenu> {
           },
         ),
         ListTile(
-          title: Text("\u{1F4C5} Calendar"),
+          title: Text("Calendar"),
           onTap: () {
+            MenuOpen.menuCalendar = true;
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => CalendarPage()));
           },

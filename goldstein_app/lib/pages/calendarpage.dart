@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 import 'package:goldstein_app/events/event.dart';
 import 'package:goldstein_app/events/event_firestore_service.dart';
 import 'package:goldstein_app/ui/view_event.dart';
-import 'package:table_calendar/table_calendar.dart';
-
 import 'package:goldstein_app/ui/leftmenu.dart';
 
 // Calendar Page that holds the calendar and all events located then
@@ -16,6 +16,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Map<DateTime, List<dynamic>> _events;
   List<dynamic> _selectedEvents;
   CalendarController _controller;
+  DateTime _openDay;
 
   // Initialise variables and events
   @override
@@ -24,14 +25,17 @@ class _CalendarPageState extends State<CalendarPage> {
     _events = {};
     _selectedEvents = [];
     _controller = CalendarController();
+    _openDay = DateTime.utc(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 12);
   }
 
   // Groups the persistent events so they can be displayed
   Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> allEvents) {
     Map<DateTime, List<dynamic>> data = {};
     allEvents.forEach((event) {
-      DateTime date = DateTime(
-          event.eventDate.year, event.eventDate.month, event.eventDate.day, 12);
+      DateTime date = DateTime(event.eventDate.year, event.eventDate.month,
+              event.eventDate.day, 12)
+          .toUtc();
       if (data[date] == null) data[date] = [];
       data[date].add(event);
     });
@@ -41,6 +45,7 @@ class _CalendarPageState extends State<CalendarPage> {
   // Build the calendar page
   @override
   Widget build(BuildContext context) {
+    //WidgetsBinding.instance.addPostFrameCallback((_) => _buildEventList());
     return Scaffold(
       appBar: AppBar(
         title: Text("Calendar"),
@@ -52,14 +57,18 @@ class _CalendarPageState extends State<CalendarPage> {
               List<EventModel> allEvents = snapshot.data;
               if (allEvents.isNotEmpty) {
                 _events = _groupEvents(allEvents);
+                if (MenuOpen.menuCalendar) {
+                  var dayEvents =
+                      _events[_openDay.subtract(Duration(hours: 11)).toUtc()];
+                  _selectedEvents = dayEvents == null ? [] : dayEvents;
+                  MenuOpen.menuCalendar = false;
+                }
               } else {
                 _events = {};
                 _selectedEvents = [];
               }
             }
-            var isPortrait =
-                MediaQuery.of(context).orientation == Orientation.portrait;
-            return _openCalendar(isPortrait);
+            return _openCalendar();
           }),
       drawer: LeftMenu(),
     );
@@ -67,33 +76,39 @@ class _CalendarPageState extends State<CalendarPage> {
 
   // Push the calendar page onto the stack
   // Opens the calendar
-  Widget _openCalendar(bool isPortrait) {
+  Widget _openCalendar() {
     return Scaffold(
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          _buildCalendar(isPortrait),
-          const SizedBox(height: 8.0),
-          const SizedBox(height: 8.0),
+          _buildCalendar(),
+          const SizedBox(height: 16.0),
           Expanded(child: _buildEventList()),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => Navigator.pushNamed(context, 'add_event'),
+        onPressed: () async {
+          await Navigator.pushNamed(context, 'add_event');
+          // show events after add_event page disappears
+          setState(() {
+            var dayEvents =
+                _events[_controller.selectedDay.subtract(Duration(hours: 11))];
+            _selectedEvents = dayEvents == null ? [] : dayEvents;
+          });
+        },
       ),
     );
   }
 
   // Builds the calendar, used to change the style of the calendar
   // At any time
-  Widget _buildCalendar(bool isPortrait) {
+  Widget _buildCalendar() {
     return TableCalendar(
-      initialCalendarFormat: _calendarFormats(isPortrait),
-      availableCalendarFormats: _calendarLayout(isPortrait),
       events: _events,
       calendarController: _controller,
       startingDayOfWeek: StartingDayOfWeek.monday,
+      availableCalendarFormats: const {CalendarFormat.month: "Month"},
       calendarStyle:
           CalendarStyle(outsideDaysVisible: false, markersColor: Colors.blue),
       headerStyle:
@@ -172,21 +187,5 @@ class _CalendarPageState extends State<CalendarPage> {
               ))
           .toList(),
     );
-  }
-
-  // Returns a corresponding map of avaliable formats to ensure the
-  // calendar correctly fits on the page
-  Map<CalendarFormat, String> _calendarLayout(bool isPortrait) {
-    if (isPortrait) return const {CalendarFormat.month: "Month"};
-    print(CalendarFormat.week);
-    return const {CalendarFormat.week: "Week"};
-  }
-
-  // Returns a calendar format for the inital format depending
-  // if the phone is portrait or landscape
-  CalendarFormat _calendarFormats(bool isPortrait) {
-    if (isPortrait) return CalendarFormat.month;
-    print(CalendarFormat.week);
-    return CalendarFormat.week;
   }
 }

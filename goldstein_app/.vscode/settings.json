@@ -1,3 +1,5 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "remote.SSH.remoteServerListenOnSocket": true,
+    "remote.SSH.lockfilesInTmp": true
 }

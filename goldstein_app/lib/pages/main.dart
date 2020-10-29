@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-//import 'package:intl/date_symbol_data_local.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import 'package:goldstein_app/ui/leftmenu.dart';
 import 'package:goldstein_app/ui/add_event.dart';
-//import 'package:goldstein_app/ui/view_event.dart';
-//import 'package:goldstein_app/events/event_firestore_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +14,10 @@ class MyApp extends StatelessWidget {
   // Root
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       title: 'Goldstein App',
       theme: ThemeData(

@@ -116,6 +116,9 @@ class _AddEventPageState extends State<AddEventPage> {
                       setState(() {
                         processing = true;
                       });
+                      if (compareDate(_eventDate))
+                        _eventDate = DateTime(DateTime.now().year,
+                            DateTime.now().month, DateTime.now().day, 12);
                       final data = {
                         "title": _title.text,
                         "description": _description.text,
@@ -142,6 +145,14 @@ class _AddEventPageState extends State<AddEventPage> {
               ),
             ),
     ];
+  }
+
+  // Compare a datetime to the current day excluding seconds/milliseconds
+  bool compareDate(DateTime date) {
+    DateTime now = DateTime.now();
+    return (date.day == now.day &&
+        date.month == now.month &&
+        date.year == now.year);
   }
 
   @override
