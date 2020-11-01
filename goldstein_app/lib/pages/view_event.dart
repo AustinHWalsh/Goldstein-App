@@ -20,19 +20,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       appBar: AppBar(
         title: Text('Event details'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              widget.event.title,
-            ),
-            SizedBox(height: 20.0),
-            Text(widget.event.description)
-          ],
-        ),
-      ),
+      body: _eventPage(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.edit),
         onPressed: () async {
@@ -45,6 +33,22 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 ),
               ));
         },
+      ),
+    );
+  }
+
+  Widget _eventPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            widget.event.title,
+          ),
+          SizedBox(height: 20.0),
+          Text(widget.event.description)
+        ],
       ),
     );
   }
