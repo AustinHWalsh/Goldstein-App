@@ -2,7 +2,7 @@
 
 App of Goldstein College
 
-Developed by Austin Walsh - 2020
+Developed by Austin Walsh - 2020/2021
 
 # Plans:
 
