@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:goldstein_app/events/event_firestore_service.dart';
 import 'package:goldstein_app/pages/calendarpage.dart';
 import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
+import 'package:goldstein_app/events/event_helpers.dart';
 
 class EditEventPage extends StatefulWidget {
   final EventModel note;
@@ -146,7 +147,7 @@ class _EditEventPageState extends State<EditEventPage> {
                       setState(() {
                         processing = true;
                       });
-                      if (compareDate(_eventDate))
+                      if (EventHelpers().compareDate(_eventDate))
                         _eventDate = DateTime(DateTime.now().year,
                             DateTime.now().month, DateTime.now().day, 12);
                       final data = {
@@ -176,14 +177,6 @@ class _EditEventPageState extends State<EditEventPage> {
               ),
             ),
     ];
-  }
-
-  // Compare a datetime to the current day excluding seconds/milliseconds
-  bool compareDate(DateTime date) {
-    DateTime now = DateTime.now();
-    return (date.day == now.day &&
-        date.month == now.month &&
-        date.year == now.year);
   }
 
   @override

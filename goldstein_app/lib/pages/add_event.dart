@@ -1,6 +1,7 @@
 import 'package:goldstein_app/events/event.dart';
 import 'package:flutter/material.dart';
 import 'package:goldstein_app/events/event_firestore_service.dart';
+import 'package:goldstein_app/events/event_helpers.dart';
 
 class AddEventPage extends StatefulWidget {
   final EventModel note;
@@ -116,7 +117,7 @@ class _AddEventPageState extends State<AddEventPage> {
                       setState(() {
                         processing = true;
                       });
-                      if (compareDate(_eventDate))
+                      if (EventHelpers().compareDate(_eventDate))
                         _eventDate = DateTime(DateTime.now().year,
                             DateTime.now().month, DateTime.now().day, 12);
                       final data = {
@@ -124,7 +125,6 @@ class _AddEventPageState extends State<AddEventPage> {
                         "description": _description.text,
                         "event_date": _eventDate
                       };
-                      print(data);
                       if (widget.note != null) {
                         await eventDBS.updateData(widget.note.id, data);
                       } else {
@@ -145,14 +145,6 @@ class _AddEventPageState extends State<AddEventPage> {
               ),
             ),
     ];
-  }
-
-  // Compare a datetime to the current day excluding seconds/milliseconds
-  bool compareDate(DateTime date) {
-    DateTime now = DateTime.now();
-    return (date.day == now.day &&
-        date.month == now.month &&
-        date.year == now.year);
   }
 
   @override

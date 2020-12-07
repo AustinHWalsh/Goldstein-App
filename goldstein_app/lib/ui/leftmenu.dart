@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 import 'package:goldstein_app/pages/main.dart';
 import 'package:goldstein_app/pages/calendarpage.dart';
+import 'package:goldstein_app/pages/weekly_events.dart';
 
 // Drawer Menu located on left side of screen
 class LeftMenu extends StatefulWidget {
@@ -48,14 +49,21 @@ class _LeftMenuState extends State<LeftMenu> {
                         HomePage(title: 'Goldstein College')));
           },
         ),
+        // ListTile(
+        //   title: Text("Calendar"),
+        //   onTap: () {
+        //     MenuOpen.menuCalendar = true;
+        //     Navigator.pushReplacement(context,
+        //         MaterialPageRoute(builder: (context) => CalendarPage()));
+        //   },
+        // ),
         ListTile(
           title: Text("Calendar"),
           onTap: () {
-            MenuOpen.menuCalendar = true;
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => CalendarPage()));
+                MaterialPageRoute(builder: (context) => WeeklyEvent()));
           },
-        ),
+        )
       ],
     );
   }

@@ -5,6 +5,7 @@ import 'package:goldstein_app/events/event.dart';
 import 'package:goldstein_app/events/event_firestore_service.dart';
 import 'package:goldstein_app/pages/view_event.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
+import 'package:goldstein_app/events/event_helpers.dart';
 
 // Calendar Page that holds the calendar and all events located then
 class CalendarPage extends StatefulWidget {
@@ -29,19 +30,6 @@ class _CalendarPageState extends State<CalendarPage> {
         DateTime.now().year, DateTime.now().month, DateTime.now().day, 12);
   }
 
-  // Groups the persistent events so they can be displayed
-  Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> allEvents) {
-    Map<DateTime, List<dynamic>> data = {};
-    allEvents.forEach((event) {
-      DateTime date = DateTime(event.eventDate.year, event.eventDate.month,
-              event.eventDate.day, 12)
-          .toUtc();
-      if (data[date] == null) data[date] = [];
-      data[date].add(event);
-    });
-    return data;
-  }
-
   // Build the calendar page
   @override
   Widget build(BuildContext context) {
@@ -55,7 +43,7 @@ class _CalendarPageState extends State<CalendarPage> {
             if (snapshot.hasData) {
               List<EventModel> allEvents = snapshot.data;
               if (allEvents.isNotEmpty) {
-                _events = _groupEvents(allEvents);
+                _events = EventHelpers().groupEvents(allEvents);
                 if (MenuOpen.menuCalendar) {
                   var dayEvents =
                       _events[_openDay.subtract(Duration(hours: 11)).toUtc()];
@@ -161,7 +149,7 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  // Displays the events when a selected on the calendar
+  // Displays the events
   Widget _buildEventList() {
     return ListView(
       children: _selectedEvents
