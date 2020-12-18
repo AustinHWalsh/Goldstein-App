@@ -14,20 +14,25 @@ class WeeklyEvent extends StatefulWidget {
 class _WeeklyEventState extends State<WeeklyEvent> {
   // set the initial page value
   Map<DateTime, List<dynamic>> _events;
+  List<dynamic> _selectedEvents;
   Widget pageItems;
   DateTime selectedDate;
   DateTime startDate;
   DateTime endDate;
   Map<String, Widget> widgets = Map();
   String widgetKeyFormat = "yyyy-MM-dd";
+  DateTime _openDay;
 
   @override
   void initState() {
     super.initState();
     _events = {};
+    _selectedEvents = [];
     selectedDate = DateTime.now();
     startDate = selectedDate.subtract(Duration(days: 10));
     endDate = selectedDate.add(Duration(days: 10));
+    _openDay = DateTime.utc(
+        selectedDate.year, selectedDate.month, selectedDate.day, 12);
   }
 
   @override
@@ -48,18 +53,9 @@ class _WeeklyEventState extends State<WeeklyEvent> {
       selectedDate: selectedDate,
       onDateChange: (direction, DateTime selectedDate) {
         setState(() {
-          pageItems = ListView(
-            children: [
-              ListTile(
-                title: Text("Test"),
-                onTap: () => {print("Pressed")},
-              ),
-              ListTile(
-                title: Text("Test2"),
-                onTap: () => {print("Second")},
-              )
-            ],
-          );
+          _openDay = DateTime.utc(
+              selectedDate.year, selectedDate.month, selectedDate.day, 12);
+          pageItems = _generatePageItems();
         });
       },
       dateStyle: TextStyle(
@@ -73,7 +69,7 @@ class _WeeklyEventState extends State<WeeklyEvent> {
       pageChangeDuration: Duration(
         milliseconds: 100,
       ),
-      pageItems: pageItems,
+      pageItems: _generatePageItems(),
       widgets: widgets,
       widgetKeyFormat: widgetKeyFormat,
       noItemsWidget: Center(
@@ -82,7 +78,8 @@ class _WeeklyEventState extends State<WeeklyEvent> {
     );
   }
 
-  Widget generatePageItems() {
+  // Create the page items from the firestore database
+  Widget _generatePageItems() {
     return StreamBuilder<List<EventModel>>(
         stream: eventDBS.streamList(),
         builder: (context, snapshot) {
@@ -90,8 +87,42 @@ class _WeeklyEventState extends State<WeeklyEvent> {
             List<EventModel> allEvents = snapshot.data;
             if (allEvents.isNotEmpty) {
               _events = EventHelpers().groupEvents(allEvents);
+              var dayEvents =
+                  _events[_openDay.subtract(Duration(hours: 11)).toUtc()];
+              _selectedEvents = dayEvents == null ? [] : dayEvents;
+            } else {
+              _events = {};
+              _selectedEvents = [];
             }
           }
+          return _buildItems();
         });
+  }
+
+  // Create the listview to hold the page items
+  Widget _buildItems() {
+    return ListView(
+      children: _selectedEvents
+          .map((event) => Container(
+                decoration: BoxDecoration(
+                  border: Border.all(width: 0.8),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                child: ListTile(
+                  title: Text(event.title.toString()),
+                  onTap: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => EventDetailsPage(
+                                  event: event,
+                                )))
+                  },
+                ),
+              ))
+          .toList(),
+    );
   }
 }

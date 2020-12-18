@@ -49,14 +49,14 @@ class _LeftMenuState extends State<LeftMenu> {
                         HomePage(title: 'Goldstein College')));
           },
         ),
-        // ListTile(
-        //   title: Text("Calendar"),
-        //   onTap: () {
-        //     MenuOpen.menuCalendar = true;
-        //     Navigator.pushReplacement(context,
-        //         MaterialPageRoute(builder: (context) => CalendarPage()));
-        //   },
-        // ),
+        ListTile(
+          title: Text("Add Event"),
+          onTap: () {
+            MenuOpen.menuCalendar = true;
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => CalendarPage()));
+          },
+        ),
         ListTile(
           title: Text("Calendar"),
           onTap: () {
