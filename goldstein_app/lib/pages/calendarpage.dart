@@ -26,8 +26,8 @@ class _CalendarPageState extends State<CalendarPage> {
     _events = {};
     _selectedEvents = [];
     _controller = CalendarController();
-    _openDay = DateTime.utc(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 12);
+    _openDay =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   }
 
   // Build the calendar page
@@ -45,8 +45,9 @@ class _CalendarPageState extends State<CalendarPage> {
               if (allEvents.isNotEmpty) {
                 _events = EventHelpers().groupEvents(allEvents);
                 if (MenuOpen.menuCalendar) {
-                  var dayEvents =
-                      _events[_openDay.subtract(Duration(hours: 11)).toUtc()];
+                  var dayEvents = _events[_openDay
+                      .subtract(Duration(hours: _openDay.hour))
+                      .toLocal()];
                   _selectedEvents = dayEvents == null ? [] : dayEvents;
                   MenuOpen.menuCalendar = false;
                 }
@@ -79,8 +80,8 @@ class _CalendarPageState extends State<CalendarPage> {
           await Navigator.pushNamed(context, 'add_event');
           // show events after add_event page disappears
           setState(() {
-            var dayEvents =
-                _events[_controller.selectedDay.subtract(Duration(hours: 11))];
+            var dayEvents = _events[
+                _openDay.subtract(Duration(hours: _openDay.hour)).toLocal()];
             _selectedEvents = dayEvents == null ? [] : dayEvents;
           });
         },

@@ -5,9 +5,9 @@ class EventHelpers {
   Map<DateTime, List<dynamic>> groupEvents(List<EventModel> allEvents) {
     Map<DateTime, List<dynamic>> data = {};
     allEvents.forEach((event) {
-      DateTime date = DateTime(event.eventDate.year, event.eventDate.month,
-              event.eventDate.day, 12)
-          .toUtc();
+      DateTime date = DateTime(
+              event.eventDate.year, event.eventDate.month, event.eventDate.day)
+          .toLocal();
       if (data[date] == null) data[date] = [];
       data[date].add(event);
     });

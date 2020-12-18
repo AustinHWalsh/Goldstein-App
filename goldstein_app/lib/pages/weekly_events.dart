@@ -31,8 +31,8 @@ class _WeeklyEventState extends State<WeeklyEvent> {
     selectedDate = DateTime.now();
     startDate = selectedDate.subtract(Duration(days: 10));
     endDate = selectedDate.add(Duration(days: 10));
-    _openDay = DateTime.utc(
-        selectedDate.year, selectedDate.month, selectedDate.day, 12);
+    _openDay =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
   }
 
   @override
@@ -53,8 +53,8 @@ class _WeeklyEventState extends State<WeeklyEvent> {
       selectedDate: selectedDate,
       onDateChange: (direction, DateTime selectedDate) {
         setState(() {
-          _openDay = DateTime.utc(
-              selectedDate.year, selectedDate.month, selectedDate.day, 12);
+          _openDay =
+              DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
           pageItems = _generatePageItems();
         });
       },
@@ -87,8 +87,8 @@ class _WeeklyEventState extends State<WeeklyEvent> {
             List<EventModel> allEvents = snapshot.data;
             if (allEvents.isNotEmpty) {
               _events = EventHelpers().groupEvents(allEvents);
-              var dayEvents =
-                  _events[_openDay.subtract(Duration(hours: 11)).toUtc()];
+              var dayEvents = _events[
+                  _openDay.subtract(Duration(hours: _openDay.hour)).toLocal()];
               _selectedEvents = dayEvents == null ? [] : dayEvents;
             } else {
               _events = {};
