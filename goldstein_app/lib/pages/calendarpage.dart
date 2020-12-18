@@ -35,7 +35,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Calendar"),
+        title: Text("Event Adder"),
       ),
       body: StreamBuilder<List<EventModel>>(
           stream: eventDBS.streamList(),
