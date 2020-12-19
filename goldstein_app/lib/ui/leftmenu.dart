@@ -63,7 +63,7 @@ class _LeftMenuState extends State<LeftMenu> {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => WeeklyEvent()));
           },
-        )
+        ),
       ],
     );
   }
