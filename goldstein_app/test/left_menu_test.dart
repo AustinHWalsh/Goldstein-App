@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:goldstein_app/pages/main.dart';
-import 'package:scrolling_day_calendar/scrolling_day_calendar.dart';
 
 // Pull out left drawer
 Future<void> openLeftMenu(WidgetTester tester) async {
