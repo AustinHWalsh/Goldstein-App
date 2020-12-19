@@ -84,12 +84,134 @@ class _WeeklyEventState extends State<WeeklyEvent> {
           mainAxisAlignment: MainAxisAlignment.center,
         ),
       ),
-      subtitle: _generateListItems(),
+      subtitle: _dailyEvents(),
+      contentPadding: EdgeInsets.zero,
     ));
   }
 
+  // Generate each day of the week as a header and use that for each list item
+  Widget _dailyEvents() {
+    DateTime weekMon =
+        _openDay.subtract(Duration(days: _openDay.weekday - DateTime.monday));
+    return ListView(
+      children: <Widget>[
+        ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            Container(
+              child: ListTile(
+                title: Text("${dateFormat.format(weekMon)}"),
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  border: Border.all(color: Colors.black)),
+            ),
+            _generateListItems(weekMon)
+          ],
+        ),
+        ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            Container(
+              child: ListTile(
+                title: Text(
+                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.monday)))}"),
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  border: Border.all(color: Colors.black)),
+            ),
+            _generateListItems(weekMon.add(Duration(days: DateTime.monday)))
+          ],
+        ),
+        ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            Container(
+              child: ListTile(
+                title: Text(
+                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.tuesday)))}"),
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  border: Border.all(color: Colors.black)),
+            ),
+            _generateListItems(weekMon.add(Duration(days: DateTime.tuesday)))
+          ],
+        ),
+        ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            Container(
+              child: ListTile(
+                title: Text(
+                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.wednesday)))}"),
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  border: Border.all(color: Colors.black)),
+            ),
+            _generateListItems(weekMon.add(Duration(days: DateTime.wednesday)))
+          ],
+        ),
+        ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            Container(
+              child: ListTile(
+                title: Text(
+                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.thursday)))}"),
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  border: Border.all(color: Colors.black)),
+            ),
+            _generateListItems(weekMon.add(Duration(days: DateTime.thursday)))
+          ],
+        ),
+        ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            Container(
+              child: ListTile(
+                title: Text(
+                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.friday)))}"),
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  border: Border.all(color: Colors.black)),
+            ),
+            _generateListItems(weekMon.add(Duration(days: DateTime.friday)))
+          ],
+        ),
+        ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            Container(
+              child: ListTile(
+                title: Text(
+                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.saturday)))}"),
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  border: Border.all(color: Colors.black)),
+            ),
+            _generateListItems(weekMon.add(Duration(days: DateTime.saturday)))
+          ],
+        ),
+      ],
+    );
+  }
+
   // Create the list of items from the firestore database
-  Widget _generateListItems() {
+  Widget _generateListItems(DateTime date) {
     return StreamBuilder<List<EventModel>>(
         stream: eventDBS.streamList(),
         builder: (context, snapshot) {
@@ -98,7 +220,7 @@ class _WeeklyEventState extends State<WeeklyEvent> {
             if (allEvents.isNotEmpty) {
               _events = EventHelpers().groupEvents(allEvents);
               var dayEvents = _events[
-                  _openDay.subtract(Duration(hours: _openDay.hour)).toLocal()];
+                  date.subtract(Duration(hours: _openDay.hour)).toLocal()];
               _selectedEvents = dayEvents == null ? [] : dayEvents;
             } else {
               _events = {};
@@ -119,7 +241,7 @@ class _WeeklyEventState extends State<WeeklyEvent> {
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 margin:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
                 child: ListTile(
                   title: Text(event.title.toString()),
                   onTap: () => {
@@ -133,6 +255,8 @@ class _WeeklyEventState extends State<WeeklyEvent> {
                 ),
               ))
           .toList(),
+      shrinkWrap: true,
+      physics: ScrollPhysics(),
     );
   }
 
