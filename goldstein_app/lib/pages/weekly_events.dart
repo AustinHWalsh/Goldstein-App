@@ -68,25 +68,26 @@ class _WeeklyEventState extends State<WeeklyEvent> {
     );
   }
 
-  // Create the page of each week
+  // Create the current page of each week
   Widget _createWeekPage() {
-    return Scaffold(
-        body: ListTile(
-      title: Container(
-        color: Colors.red,
-        child: Row(
-          children: <Widget>[
-            Text(
-              weekString(_openDay),
-              style: TextStyle(color: Colors.white),
-            )
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
+    return ListView(
+      children: [
+        Container(
+          color: Colors.red,
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            children: <Widget>[
+              Text(
+                weekString(_openDay),
+                style: TextStyle(color: Colors.white),
+              )
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
         ),
-      ),
-      subtitle: _dailyEvents(),
-      contentPadding: EdgeInsets.zero,
-    ));
+        _dailyEvents(),
+      ],
+    );
   }
 
   // Generate each day of the week as a header and use that for each list item
@@ -94,6 +95,8 @@ class _WeeklyEventState extends State<WeeklyEvent> {
     DateTime weekMon =
         _openDay.subtract(Duration(days: _openDay.weekday - DateTime.monday));
     return ListView(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
       children: <Widget>[
         ListView(
           shrinkWrap: true,
@@ -241,7 +244,7 @@ class _WeeklyEventState extends State<WeeklyEvent> {
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 margin:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                    const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
                 child: ListTile(
                   title: Text(event.title.toString()),
                   onTap: () => {
@@ -256,7 +259,7 @@ class _WeeklyEventState extends State<WeeklyEvent> {
               ))
           .toList(),
       shrinkWrap: true,
-      physics: ScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
     );
   }
 
