@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
+import 'package:goldstein_app/assets/password.dart';
 
 class LoginMenu {
   final _formKey = GlobalKey<FormState>();
   final _password = TextEditingController();
+  final _passwordHash = LoginPassword();
 
   // Open the login popup for the user to enter in information
   openPopup(context) {
@@ -20,7 +22,8 @@ class LoginMenu {
                 validator: (value) {
                   if (value.isEmpty)
                     return "Please enter a password";
-                  else if (!validPass(value)) return "Incorrect password";
+                  else if (_passwordHash.verifyPassword(value))
+                    return "Incorrect password";
                   return null;
                 },
                 decoration: InputDecoration(
@@ -50,10 +53,5 @@ class LoginMenu {
             },
           )
         ]).show();
-  }
-
-  // Used to valid if the password has the same hash as the current one
-  bool validPass(String password) {
-    return password == "Pass";
   }
 }
