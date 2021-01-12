@@ -3,6 +3,7 @@ import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 import 'package:goldstein_app/pages/main.dart';
 import 'package:goldstein_app/pages/calendarpage.dart';
 import 'package:goldstein_app/pages/weekly_events.dart';
+import 'package:goldstein_app/pages/login_page.dart';
 
 // Drawer Menu located on left side of screen
 class LeftMenu extends StatefulWidget {
@@ -11,6 +12,8 @@ class LeftMenu extends StatefulWidget {
 }
 
 class _LeftMenuState extends State<LeftMenu> {
+  final loginMenu = new LoginMenu();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -58,6 +61,22 @@ class _LeftMenuState extends State<LeftMenu> {
                 MaterialPageRoute(builder: (context) => WeeklyEvent()));
           },
         ),
+        ListTile(
+          leading: Icon(Icons.restaurant_rounded),
+          title: Text("Dino"),
+          onTap: () {},
+        ),
+        Visibility(
+          child: ListTile(
+            leading: Icon(Icons.event_available),
+            title: Text("Events"),
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => CalendarPage()));
+            },
+          ),
+          visible: MenuOpen.userLogged,
+        ),
         Expanded(
           child: Align(
             alignment: FractionalOffset.bottomCenter,
@@ -65,9 +84,7 @@ class _LeftMenuState extends State<LeftMenu> {
               leading: Icon(Icons.login_rounded),
               title: Text("Login"),
               onTap: () {
-                MenuOpen.menuCalendar = true;
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => CalendarPage()));
+                loginMenu.openPopup(context);
               },
             ),
           ),
