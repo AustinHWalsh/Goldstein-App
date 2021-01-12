@@ -20,8 +20,8 @@ class _LeftMenuState extends State<LeftMenu> {
 
   // Holds the values of the menu in a list tile
   Widget menu(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.zero,
+    return Column(
+      mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Container(
           height: 100.0,
@@ -34,10 +34,8 @@ class _LeftMenuState extends State<LeftMenu> {
                   fontSize: 20),
               textAlign: TextAlign.left,
             ),
-            decoration: BoxDecoration(
-              color: Colors.red,
-            ),
           ),
+          color: Colors.red,
         ),
         ListTile(
           title: Text("Home"),
@@ -50,19 +48,24 @@ class _LeftMenuState extends State<LeftMenu> {
           },
         ),
         ListTile(
-          title: Text("Add Event"),
-          onTap: () {
-            MenuOpen.menuCalendar = true;
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => CalendarPage()));
-          },
-        ),
-        ListTile(
           title: Text("Calendar"),
           onTap: () {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => WeeklyEvent()));
           },
+        ),
+        Expanded(
+          child: Align(
+            alignment: FractionalOffset.bottomCenter,
+            child: ListTile(
+              title: Text("Login"),
+              onTap: () {
+                MenuOpen.menuCalendar = true;
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => CalendarPage()));
+              },
+            ),
+          ),
         ),
       ],
     );

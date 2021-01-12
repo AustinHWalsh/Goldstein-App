@@ -7,7 +7,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:goldstein_app/pages/main.dart';
 
 // Pull out left drawer
