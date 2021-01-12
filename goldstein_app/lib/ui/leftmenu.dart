@@ -71,24 +71,28 @@ class _LeftMenuState extends State<LeftMenu> {
             leading: Icon(Icons.event_available),
             title: Text("Events"),
             onTap: () {
+              MenuOpen.menuCalendar = true;
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => CalendarPage()));
             },
           ),
           visible: MenuOpen.userLogged,
         ),
-        Expanded(
-          child: Align(
-            alignment: FractionalOffset.bottomCenter,
-            child: ListTile(
-              leading: Icon(Icons.login_rounded),
-              title: Text("Login"),
-              onTap: () {
-                loginMenu.openPopup(context);
-              },
+        Visibility(
+          child: Expanded(
+            child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: ListTile(
+                leading: Icon(Icons.login_rounded),
+                title: Text("Login"),
+                onTap: () {
+                  loginMenu.openPopup(context);
+                },
+              ),
             ),
           ),
-        ),
+          visible: !MenuOpen.userLogged,
+        )
       ],
     );
   }
