@@ -24,20 +24,23 @@ class _LeftMenuState extends State<LeftMenu> {
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Container(
-          height: 100.0,
-          child: DrawerHeader(
-            child: Text(
+          height: 125.0,
+          child: UserAccountsDrawerHeader(
+            decoration: BoxDecoration(
+              color: new Color(0xFFF44336),
+            ),
+            accountName: Text(
               "Menu",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 20),
-              textAlign: TextAlign.left,
             ),
+            accountEmail: null,
           ),
-          color: Colors.red,
         ),
         ListTile(
+          leading: Icon(Icons.home),
           title: Text("Home"),
           onTap: () {
             Navigator.pushReplacement(
@@ -48,6 +51,7 @@ class _LeftMenuState extends State<LeftMenu> {
           },
         ),
         ListTile(
+          leading: Icon(Icons.calendar_today_rounded),
           title: Text("Calendar"),
           onTap: () {
             Navigator.pushReplacement(context,
@@ -58,6 +62,7 @@ class _LeftMenuState extends State<LeftMenu> {
           child: Align(
             alignment: FractionalOffset.bottomCenter,
             child: ListTile(
+              leading: Icon(Icons.login_rounded),
               title: Text("Login"),
               onTap: () {
                 MenuOpen.menuCalendar = true;
