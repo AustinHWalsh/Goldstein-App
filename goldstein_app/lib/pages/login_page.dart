@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
+import 'package:goldstein_app/assets/password.dart';
 
 class LoginMenu {
   final _formKey = GlobalKey<FormState>();
   final _password = TextEditingController();
-  //final _passwordHash = LoginPassword();
-  //final pass = Password.hash("Pass", new PBKDF2());
+  final _hasher = PasswordHash();
 
   // Open the login popup for the user to enter in information
   openPopup(context) {
@@ -20,9 +20,10 @@ class LoginMenu {
               child: TextFormField(
                 controller: _password,
                 validator: (value) {
-                  if (value.isEmpty) return "Please enter a password";
-                  //else if (Password.verify(value, pass))
-                  //return "Incorrect password";
+                  if (value.isEmpty)
+                    return "Please enter a password";
+                  else if (_hasher.verifyPass(value))
+                    return "Incorrect password";
                   return null;
                 },
                 decoration: InputDecoration(
