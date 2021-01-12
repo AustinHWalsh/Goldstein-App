@@ -21,6 +21,6 @@ void main() {
     await tester.tap(find.text("Login"));
 
     // Expect to find the enter button when the login appears
-    expect(find.text("Enter"), findsOneWidget);
+    expect(find.byIcon(Icons.lock), findsOneWidget);
   });
 }

@@ -2,7 +2,6 @@
 
 // Testing opening, accessing pages and closing the menu
 // TODO:
-// Test login
 // Test accessing dino menu
 
 import 'package:flutter/material.dart';
@@ -35,9 +34,9 @@ void main() {
     await tester.tap(find.text("Home"));
     expect(find.text("Homepage"), findsOneWidget);
 
-    // Test opening add event TODO: change to login
+    // Test opening add event
     await openLeftMenu(tester);
-    await tester.tap(find.text("Add Event"));
+    await tester.tap(find.text("Login"));
     expect(find.byType(IconButton), findsWidgets);
 
     // Test opening calendar/day events

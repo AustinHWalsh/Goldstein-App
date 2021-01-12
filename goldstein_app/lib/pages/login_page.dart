@@ -35,7 +35,10 @@ class LoginMenu {
         ),
         buttons: [
           DialogButton(
-            child: Text("Enter"),
+            child: Text(
+              "Enter",
+              style: TextStyle(color: Colors.white),
+            ),
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
