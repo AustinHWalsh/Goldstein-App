@@ -97,118 +97,26 @@ class _WeeklyEventState extends State<WeeklyEvent> {
     return ListView(
       shrinkWrap: true,
       physics: ClampingScrollPhysics(),
+      children: List<Widget>.generate(DateTime.sunday, (index) {
+        return _weekdayHeader(weekMon.add(Duration(days: index)));
+      }),
+    );
+  }
+
+  // Returns the widget with the weekday as a header for the listview
+  Widget _weekdayHeader(DateTime day) {
+    return ListView(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
-        ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            Container(
-              child: ListTile(
-                title: Text("${dateFormat.format(weekMon)}"),
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  border: Border.all(color: Colors.black)),
-            ),
-            _generateListItems(weekMon)
-          ],
+        Container(
+          child: ListTile(
+            title: Text("${dateFormat.format(day)}"),
+          ),
+          decoration: BoxDecoration(
+              color: Colors.grey[300], border: Border.all(color: Colors.black)),
         ),
-        ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            Container(
-              child: ListTile(
-                title: Text(
-                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.monday)))}"),
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  border: Border.all(color: Colors.black)),
-            ),
-            _generateListItems(weekMon.add(Duration(days: DateTime.monday)))
-          ],
-        ),
-        ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            Container(
-              child: ListTile(
-                title: Text(
-                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.tuesday)))}"),
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  border: Border.all(color: Colors.black)),
-            ),
-            _generateListItems(weekMon.add(Duration(days: DateTime.tuesday)))
-          ],
-        ),
-        ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            Container(
-              child: ListTile(
-                title: Text(
-                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.wednesday)))}"),
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  border: Border.all(color: Colors.black)),
-            ),
-            _generateListItems(weekMon.add(Duration(days: DateTime.wednesday)))
-          ],
-        ),
-        ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            Container(
-              child: ListTile(
-                title: Text(
-                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.thursday)))}"),
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  border: Border.all(color: Colors.black)),
-            ),
-            _generateListItems(weekMon.add(Duration(days: DateTime.thursday)))
-          ],
-        ),
-        ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            Container(
-              child: ListTile(
-                title: Text(
-                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.friday)))}"),
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  border: Border.all(color: Colors.black)),
-            ),
-            _generateListItems(weekMon.add(Duration(days: DateTime.friday)))
-          ],
-        ),
-        ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            Container(
-              child: ListTile(
-                title: Text(
-                    "${dateFormat.format(weekMon.add(Duration(days: DateTime.saturday)))}"),
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  border: Border.all(color: Colors.black)),
-            ),
-            _generateListItems(weekMon.add(Duration(days: DateTime.saturday)))
-          ],
-        ),
+        _generateListItems(day)
       ],
     );
   }

@@ -27,7 +27,7 @@ class _LeftMenuState extends State<LeftMenu> {
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Container(
-          height: 125.0,
+          height: (MediaQuery.of(context).size.height / 7),
           child: UserAccountsDrawerHeader(
             decoration: BoxDecoration(
               color: new Color(0xFFF44336),

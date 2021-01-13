@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goldstein_app/events/event.dart';
 import 'package:goldstein_app/pages/edit_event.dart';
+import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 
 class EventDetailsPage extends StatefulWidget {
   final EventModel event;
@@ -17,24 +18,26 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Event details'),
-      ),
-      body: _eventPage(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.edit),
-        onPressed: () async {
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => EditEventPage(
-                  key: widget.key,
-                  note: widget.event,
-                ),
-              ));
-        },
-      ),
-    );
+        appBar: AppBar(
+          title: Text('Event details'),
+        ),
+        body: _eventPage(),
+        floatingActionButton: Visibility(
+          visible: MenuOpen.userLogged,
+          child: FloatingActionButton(
+            child: Icon(Icons.edit),
+            onPressed: () async {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => EditEventPage(
+                      key: widget.key,
+                      note: widget.event,
+                    ),
+                  ));
+            },
+          ),
+        ));
   }
 
   Widget _eventPage() {
