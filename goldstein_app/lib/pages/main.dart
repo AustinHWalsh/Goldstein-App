@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:goldstein_app/pages/weekly_events.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
 import 'package:goldstein_app/pages/add_event.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,11 +62,59 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             title: Text("Goldstein College"),
           ),
         ),
+        SliverList(
+            delegate: SliverChildListDelegate([
+          Padding(
+            padding: EdgeInsets.all(5),
+            child: Container(
+              child: Text(
+                "Announcements",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              height: (MediaQuery.of(context).size.height / 12),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.red,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5),
+            child: Container(
+              height: (MediaQuery.of(context).size.height / 3),
+              child: ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  ListTile(
+                    title: Text("Test"),
+                  ),
+                  ListTile(
+                    title: Text("Test"),
+                  ),
+                  ListTile(
+                    title: Text("Test"),
+                  ),
+                  ListTile(
+                    title: Text("Test"),
+                  ),
+                  ListTile(
+                    title: Text("Test"),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ])),
         navigatorButtons(),
       ],
     );
   }
 
+  // SliverGrid that holds the buttons and their style
   Widget navigatorButtons() {
     return SliverGrid(
         delegate:
@@ -90,10 +139,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         pressed = () {};
         break;
       case 1:
-        text = Text("Calendar");
-        pressed = () {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => WeeklyEvent()));
+        text = Text("Facebook");
+        pressed = () async {
+          const url = "https://www.facebook.com/groups/121650729274806/";
+          if (await canLaunch(url))
+            await launch(url);
+          else
+            throw "Could not launch $url";
         };
         break;
       case 2:
@@ -101,11 +153,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         pressed = () {};
         break;
       case 3:
-        text = Text("Test");
-        pressed = () {};
+        text = Text("Calendar");
+        pressed = () {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => WeeklyEvent()));
+        };
         break;
       default:
-        throw ("5 List elements created");
+        throw ("5 boxes elements created");
     }
     return Padding(
       padding: EdgeInsets.all(5),
@@ -115,10 +170,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               border: Border.all(color: Colors.red, width: 4),
               borderRadius: BorderRadius.circular(12)),
           child: SizedBox.expand(
-            child: ElevatedButton(
+            child: OutlinedButton(
               child: text,
               onPressed: pressed,
               style: ButtonStyle(
+                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8))),
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.white)),
             ),
