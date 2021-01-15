@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:goldstein_app/announcements/announce_firestore_service.dart';
+import 'package:goldstein_app/announcements/announcement.dart';
 import 'package:goldstein_app/pages/weekly_events.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
 import 'package:goldstein_app/pages/add_event.dart';
@@ -45,6 +47,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  List<dynamic> _announcements;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,26 +90,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             padding: EdgeInsets.all(5),
             child: Container(
               height: (MediaQuery.of(context).size.height / 3),
-              child: ListView(
-                shrinkWrap: true,
-                children: <Widget>[
-                  ListTile(
-                    title: Text("Test"),
-                  ),
-                  ListTile(
-                    title: Text("Test"),
-                  ),
-                  ListTile(
-                    title: Text("Test"),
-                  ),
-                  ListTile(
-                    title: Text("Test"),
-                  ),
-                  ListTile(
-                    title: Text("Test"),
-                  ),
-                ],
-              ),
+              child: createAnnouncements(),
             ),
           )
         ])),
@@ -181,6 +166,43 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       MaterialStateProperty.all<Color>(Colors.white)),
             ),
           )),
+    );
+  }
+
+  Widget createAnnouncements() {
+    return StreamBuilder<List<AnnouncementModel>>(
+      stream: announcementDBS.streamList(),
+      builder: (context, snapshot) {
+        print(snapshot.data);
+        if (snapshot.hasData) {
+          print("passed");
+          List<AnnouncementModel> _announcements = snapshot.data;
+
+          if (_announcements.isEmpty) {
+            return ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                Container(
+                  child: Text("No Announcements"),
+                  alignment: Alignment.center,
+                )
+              ],
+            );
+          }
+        }
+        return _createAnnouncementList();
+      },
+    );
+  }
+
+  Widget _createAnnouncementList() {
+    return ListView(
+      shrinkWrap: true,
+      children: _announcements
+          .map((announcement) => ListTile(
+                title: Text(announcement.details.toString()),
+              ))
+          .toList(),
     );
   }
 }
