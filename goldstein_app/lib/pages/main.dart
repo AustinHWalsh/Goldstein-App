@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:goldstein_app/pages/add_announcement.dart';
+import 'package:goldstein_app/ui/menu_open.dart';
+import 'package:intl/intl.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:goldstein_app/announcements/announce_firestore_service.dart';
 import 'package:goldstein_app/announcements/announcement.dart';
@@ -48,12 +51,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List<dynamic> _announcements;
+  String formatDate(DateTime date) => new DateFormat("MMMM d").format(date);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: homepage(),
       drawer: LeftMenu(),
+      floatingActionButton: Visibility(
+          visible: MenuOpen.userLogged,
+          child: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () async {
+              await Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddAnnouncePage()));
+            },
+          )),
     );
   }
 
@@ -69,7 +82,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         SliverList(
             delegate: SliverChildListDelegate([
           Padding(
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.only(top: 5, left: 5, right: 5),
             child: Container(
               child: Text(
                 "Announcements",
@@ -87,9 +100,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.only(bottom: 5, left: 5, right: 5),
             child: Container(
-              height: (MediaQuery.of(context).size.height / 3),
+              height: (MediaQuery.of(context).size.height / (2.5)),
               child: createAnnouncements(),
             ),
           )
@@ -173,36 +186,42 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return StreamBuilder<List<AnnouncementModel>>(
       stream: announcementDBS.streamList(),
       builder: (context, snapshot) {
-        print(snapshot.data);
-        if (snapshot.hasData) {
-          print("passed");
-          List<AnnouncementModel> _announcements = snapshot.data;
-
-          if (_announcements.isEmpty) {
-            return ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                Container(
-                  child: Text("No Announcements"),
-                  alignment: Alignment.center,
-                )
-              ],
-            );
-          }
-        }
+        if (snapshot.hasData) _announcements = snapshot.data;
         return _createAnnouncementList();
       },
     );
   }
 
   Widget _createAnnouncementList() {
+    if (_announcements != null && _announcements.isNotEmpty) {
+      return ListView(
+        shrinkWrap: true,
+        children: _announcements
+            .map((announcement) => Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 0.8),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 4.0, vertical: 2.0),
+                  child: ListTile(
+                    title: Text(announcement.details.toString()),
+                    subtitle: Text(((announcement.author.toString()) +
+                        " - " +
+                        formatDate(announcement.announcementDate))),
+                  ),
+                ))
+            .toList(),
+      );
+    }
     return ListView(
       shrinkWrap: true,
-      children: _announcements
-          .map((announcement) => ListTile(
-                title: Text(announcement.details.toString()),
-              ))
-          .toList(),
+      children: <Widget>[
+        Container(
+          child: Text("No Announcements"),
+          alignment: Alignment.center,
+        )
+      ],
     );
   }
 }
