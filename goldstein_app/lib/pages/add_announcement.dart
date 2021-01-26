@@ -52,6 +52,31 @@ class _AddAnnouncePageState extends State<AddAnnouncePage> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.delete),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                    title: Text("Delete announcement?"),
+                    actions: [
+                      FlatButton(
+                        child: Text("No"),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      FlatButton(
+                        child: Text("Yes"),
+                        onPressed: () async {
+                          await announcementDBS.removeItem(widget.note.id);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                    elevation: 24.0,
+                  ));
+        },
+      ),
     );
   }
 

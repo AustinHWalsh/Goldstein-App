@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goldstein_app/events/event.dart';
-import 'package:goldstein_app/pages/edit_event.dart';
+import 'package:goldstein_app/pages/add_event.dart';
 import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 
 class EventDetailsPage extends StatefulWidget {
@@ -30,7 +30,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => EditEventPage(
+                    builder: (_) => AddEventPage(
                       key: widget.key,
                       note: widget.event,
                     ),

@@ -2,6 +2,7 @@ import 'package:goldstein_app/events/event.dart';
 import 'package:flutter/material.dart';
 import 'package:goldstein_app/events/event_firestore_service.dart';
 import 'package:goldstein_app/events/event_helpers.dart';
+import 'package:goldstein_app/ui/menu_open.dart';
 
 class AddEventPage extends StatefulWidget {
   final EventModel note;
@@ -48,6 +49,33 @@ class _AddEventPageState extends State<AddEventPage> {
             children: _openAddPage(),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.delete),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                    title: Text("Delete ${widget.note.title}?"),
+                    actions: [
+                      FlatButton(
+                        child: Text("No"),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      FlatButton(
+                        child: Text("Yes"),
+                        onPressed: () async {
+                          await eventDBS.removeItem(widget.note.id);
+                          MenuOpen.menuCalendar = true;
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                    elevation: 24.0,
+                  ));
+        },
       ),
     );
   }

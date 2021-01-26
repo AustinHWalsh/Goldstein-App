@@ -226,8 +226,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         }
                       }
                     },
-                    onLongPress: () {
-                      if (MenuOpen.userLogged) null;
+                    onLongPress: () async {
+                      if (MenuOpen.userLogged) {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AddAnnouncePage(
+                                key: widget.key,
+                                note: announcement,
+                              ),
+                            ));
+                      }
                     },
                   ),
                 ))
