@@ -182,6 +182,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  // Get the snapshot of announcements and create a list if it has data
   Widget createAnnouncements() {
     return StreamBuilder<List<AnnouncementModel>>(
       stream: announcementDBS.streamList(),
@@ -192,8 +193,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  // Create a list of listtiles containing the contents of each announcement
   Widget _createAnnouncementList() {
     if (_announcements != null && _announcements.isNotEmpty) {
+      //_announcements.sort();
       return ListView(
         shrinkWrap: true,
         children: _announcements
@@ -209,6 +212,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     subtitle: Text(((announcement.author.toString()) +
                         " - " +
                         formatDate(announcement.announcementDate))),
+                    trailing: Visibility(
+                      visible: (announcement.url.toString() != ""),
+                      child: Icon(Icons.launch_rounded),
+                    ),
+                    onTap: () async {
+                      String _url = announcement.url.toString();
+                      if (_url != "") {
+                        if (await canLaunch(_url))
+                          await launch(_url);
+                        else {
+                          await _openInvalidUrl();
+                        }
+                      }
+                    },
+                    onLongPress: () {
+                      if (MenuOpen.userLogged) null;
+                    },
                   ),
                 ))
             .toList(),
@@ -223,5 +243,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         )
       ],
     );
+  }
+
+  // If the provided url cannot be opened, display a popup to alert the user
+  Future<void> _openInvalidUrl() async {
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Invalid Url"),
+            content: Text(
+                "The provided url is invalid, please contact the author of the announcement"),
+          );
+        });
   }
 }

@@ -5,8 +5,10 @@ class AnnouncementModel extends DatabaseService {
   final String details;
   final DateTime announcementDate;
   final String author;
+  final String url;
 
-  AnnouncementModel({this.id, this.details, this.announcementDate, this.author})
+  AnnouncementModel(
+      {this.id, this.details, this.announcementDate, this.author, this.url})
       : super(id);
 
   factory AnnouncementModel.fromMap(Map data) {
@@ -14,6 +16,7 @@ class AnnouncementModel extends DatabaseService {
       details: data['details'],
       announcementDate: data['date'],
       author: data['author'],
+      url: data['url'],
     );
   }
 
@@ -23,6 +26,7 @@ class AnnouncementModel extends DatabaseService {
       details: data['details'],
       announcementDate: data['date'].toDate(),
       author: data['author'],
+      url: data['url'],
     );
   }
 }

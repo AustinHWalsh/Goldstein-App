@@ -15,7 +15,8 @@ class _AddAnnouncePageState extends State<AddAnnouncePage> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _author;
-  DateTime _eventDate;
+  TextEditingController _url;
+  DateTime _announceDate;
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   bool processing;
@@ -27,7 +28,9 @@ class _AddAnnouncePageState extends State<AddAnnouncePage> {
         text: widget.note != null ? widget.note.details : "");
     _author = TextEditingController(
         text: widget.note != null ? widget.note.author : "");
-    _eventDate = DateTime.now();
+    _announceDate = DateTime.now();
+    _url =
+        TextEditingController(text: widget.note != null ? widget.note.url : "");
     processing = false;
   }
 
@@ -59,11 +62,13 @@ class _AddAnnouncePageState extends State<AddAnnouncePage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: TextFormField(
           controller: _title,
+          minLines: 3,
+          maxLines: 5,
           validator: (value) =>
               (value.isEmpty) ? "Please enter the announcement" : null,
           style: style,
           decoration: InputDecoration(
-              labelText: "Title",
+              labelText: "Announcement",
               filled: true,
               fillColor: Colors.white,
               border:
@@ -74,13 +79,23 @@ class _AddAnnouncePageState extends State<AddAnnouncePage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: TextFormField(
           controller: _author,
-          minLines: 3,
-          maxLines: 5,
           validator: (value) =>
               (value.isEmpty) ? "Please enter an author" : null,
           style: style,
           decoration: InputDecoration(
               labelText: "Author",
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+        ),
+      ),
+      const SizedBox(height: 10.0),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: TextFormField(
+          controller: _url,
+          style: style,
+          decoration: InputDecoration(
+              labelText: "URL",
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
         ),
@@ -100,13 +115,17 @@ class _AddAnnouncePageState extends State<AddAnnouncePage> {
                       setState(() {
                         processing = true;
                       });
-                      _eventDate = DateTime(DateTime.now().year,
-                          DateTime.now().month, DateTime.now().day);
-                      print(_eventDate);
+                      _announceDate = DateTime(
+                          _announceDate.year,
+                          _announceDate.month,
+                          _announceDate.day,
+                          _announceDate.hour,
+                          _announceDate.minute);
                       final data = {
                         "details": _title.text,
                         "author": _author.text,
-                        "date": _eventDate
+                        "date": _announceDate,
+                        "url": _url.text,
                       };
                       if (widget.note != null) {
                         await announcementDBS.updateData(widget.note.id, data);
