@@ -102,6 +102,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           Padding(
             padding: EdgeInsets.only(bottom: 5, left: 5, right: 5),
             child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 0.8, color: Colors.red),
+                borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(5), bottom: Radius.circular(5)),
+              ),
               height: (MediaQuery.of(context).size.height / (2.5)),
               child: createAnnouncements(),
             ),
@@ -196,51 +201,60 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // Create a list of listtiles containing the contents of each announcement
   Widget _createAnnouncementList() {
     if (_announcements != null && _announcements.isNotEmpty) {
-      //_announcements.sort();
-      return ListView(
-        shrinkWrap: true,
-        children: _announcements
-            .map((announcement) => Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 0.8),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: 4.0, vertical: 2.0),
-                  child: ListTile(
-                    title: Text(announcement.details.toString()),
-                    subtitle: Text(((announcement.author.toString()) +
-                        " - " +
-                        formatDate(announcement.announcementDate))),
-                    trailing: Visibility(
-                      visible: (announcement.url.toString() != ""),
-                      child: Icon(Icons.launch_rounded),
+      _announcements.sort((a, b) {
+        return b.announcementDate
+            .toString()
+            .compareTo(a.announcementDate.toString());
+      });
+      return MediaQuery.removePadding(
+        context: context,
+        child: ListView(
+          shrinkWrap: true,
+          children: _announcements
+              .map((announcement) => Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.8),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
-                    onTap: () async {
-                      String _url = announcement.url.toString();
-                      if (_url != "") {
-                        if (await canLaunch(_url))
-                          await launch(_url);
-                        else {
-                          await _openInvalidUrl();
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 4.0, vertical: 2.0),
+                    child: ListTile(
+                      dense: true,
+                      title: Text(announcement.details.toString()),
+                      subtitle: Text(((announcement.author.toString()) +
+                          " - " +
+                          formatDate(announcement.announcementDate))),
+                      trailing: Visibility(
+                        visible: (announcement.url.toString() != ""),
+                        child: Icon(Icons.launch_rounded),
+                      ),
+                      onTap: () async {
+                        String _url = announcement.url.toString();
+                        if (_url != "") {
+                          if (await canLaunch(_url))
+                            await launch(_url);
+                          else {
+                            await _openInvalidUrl();
+                          }
                         }
-                      }
-                    },
-                    onLongPress: () async {
-                      if (MenuOpen.userLogged) {
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => AddAnnouncePage(
-                                key: widget.key,
-                                note: announcement,
-                              ),
-                            ));
-                      }
-                    },
-                  ),
-                ))
-            .toList(),
+                      },
+                      onLongPress: () async {
+                        if (MenuOpen.userLogged) {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => AddAnnouncePage(
+                                  key: widget.key,
+                                  note: announcement,
+                                ),
+                              ));
+                        }
+                      },
+                    ),
+                  ))
+              .toList(),
+        ),
+        removeTop: true,
       );
     }
     return ListView(
