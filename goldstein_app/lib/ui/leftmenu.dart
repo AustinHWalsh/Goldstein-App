@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goldstein_app/pages/dino.dart';
 import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 import 'package:goldstein_app/pages/main.dart';
 import 'package:goldstein_app/pages/calendarpage.dart';
@@ -64,7 +65,10 @@ class _LeftMenuState extends State<LeftMenu> {
         ListTile(
           leading: Icon(Icons.restaurant_rounded),
           title: Text("Dino"),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => DinoMeals()));
+          },
         ),
         Visibility(
           child: ListTile(

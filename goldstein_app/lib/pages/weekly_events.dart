@@ -84,6 +84,7 @@ class _WeeklyEventState extends State<WeeklyEvent> {
             ],
             mainAxisAlignment: MainAxisAlignment.center,
           ),
+          height: MediaQuery.of(context).size.height / 12,
         ),
         _dailyEvents(),
       ],
@@ -174,7 +175,19 @@ class _WeeklyEventState extends State<WeeklyEvent> {
   // Generate the current week in the year from a day
   int weekFromDay(DateTime date) {
     int dayOfYear = int.parse(DateFormat("D").format(date));
-    return ((dayOfYear - date.weekday + 10) / DateTime.daysPerWeek).floor();
+    int woy = ((dayOfYear - date.weekday + 10) / 7).floor();
+    if (woy < 1) {
+      woy = numOfWeeks(date.year - 1);
+    } else if (woy > numOfWeeks(date.year)) {
+      woy = 1;
+    }
+    return woy;
+  }
+
+  int numOfWeeks(int year) {
+    DateTime dec28 = DateTime(year, 12, 28);
+    int dayOfDec28 = int.parse(DateFormat("D").format(dec28));
+    return ((dayOfDec28 - dec28.weekday + 10) / 7).floor();
   }
 
   // Generate the string containing the current week
