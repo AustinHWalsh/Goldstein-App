@@ -63,8 +63,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           child: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () async {
+              MenuOpen.adding = true;
               await Navigator.push(context,
                   MaterialPageRoute(builder: (context) => AddAnnouncePage()));
+              MenuOpen.adding = false;
             },
           )),
     );
@@ -142,7 +144,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         pressed = () {};
         break;
       case 1:
-        text = Text("Facebook");
+        text = ListTile(
+          leading: Image.asset(
+            "assets/facebook.png",
+            height: 35,
+            width: 35,
+          ),
+          title: Text(
+            "Facebook",
+            style: TextStyle(inherit: false, color: Colors.red),
+          ),
+        );
         pressed = () async {
           const url = "https://www.facebook.com/groups/121650729274806/";
           if (await canLaunch(url))
@@ -152,7 +164,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         };
         break;
       case 2:
-        text = Text("Dino");
+        text = ListTile(
+          leading: Icon(
+            Icons.phone,
+            color: Colors.red,
+            size: 35,
+          ),
+          title: Text(
+            "Contacts",
+            style: TextStyle(inherit: false, color: Colors.red),
+          ),
+        );
         pressed = () {};
         break;
       case 3:

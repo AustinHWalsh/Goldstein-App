@@ -73,6 +73,27 @@ class _DinoMealsState extends State<DinoMeals> {
           ),
           height: MediaQuery.of(context).size.height / 12,
         ),
+        Container(
+          child: ListTile(
+            title: Text("Breakfast"),
+          ),
+          decoration: BoxDecoration(
+              color: Colors.grey[300], border: Border.all(color: Colors.black)),
+        ),
+        Container(
+          child: ListTile(
+            title: Text("Lunch"),
+          ),
+          decoration: BoxDecoration(
+              color: Colors.grey[300], border: Border.all(color: Colors.black)),
+        ),
+        Container(
+          child: ListTile(
+            title: Text("Dinner"),
+          ),
+          decoration: BoxDecoration(
+              color: Colors.grey[300], border: Border.all(color: Colors.black)),
+        ),
       ],
     );
   }

@@ -77,6 +77,7 @@ class _CalendarPageState extends State<CalendarPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
+          MenuOpen.adding = true;
           await Navigator.pushNamed(context, 'add_event');
           // show events after add_event page disappears
           setState(() {
@@ -84,6 +85,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 _openDay.subtract(Duration(hours: _openDay.hour)).toLocal()];
             _selectedEvents = dayEvents == null ? [] : dayEvents;
           });
+          MenuOpen.adding = false;
         },
       ),
     );

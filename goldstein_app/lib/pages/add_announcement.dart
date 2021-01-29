@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goldstein_app/announcements/announce_firestore_service.dart';
 import 'package:goldstein_app/announcements/announcement.dart';
+import 'package:goldstein_app/ui/menu_open.dart';
 
 class AddAnnouncePage extends StatefulWidget {
   final AnnouncementModel note;
@@ -38,46 +39,48 @@ class _AddAnnouncePageState extends State<AddAnnouncePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-            widget.note != null ? "Edit announcement" : "Add announcement"),
-      ),
-      key: _key,
-      body: Form(
-        key: _formKey,
-        child: Container(
-          alignment: Alignment.center,
-          child: ListView(
-            children: _openAddPage(),
+        appBar: AppBar(
+          title: Text(
+              widget.note != null ? "Edit announcement" : "Add announcement"),
+        ),
+        key: _key,
+        body: Form(
+          key: _formKey,
+          child: Container(
+            alignment: Alignment.center,
+            child: ListView(
+              children: _openAddPage(),
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.delete),
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                    title: Text("Delete announcement?"),
-                    actions: [
-                      FlatButton(
-                        child: Text("No"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      FlatButton(
-                        child: Text("Yes"),
-                        onPressed: () async {
-                          await announcementDBS.removeItem(widget.note.id);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                      )
-                    ],
-                    elevation: 24.0,
-                  ));
-        },
-      ),
-    );
+        floatingActionButton: Visibility(
+          visible: !MenuOpen.adding,
+          child: FloatingActionButton(
+            child: Icon(Icons.delete),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                        title: Text("Delete announcement?"),
+                        actions: [
+                          FlatButton(
+                            child: Text("No"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          FlatButton(
+                            child: Text("Yes"),
+                            onPressed: () async {
+                              await announcementDBS.removeItem(widget.note.id);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
+                        elevation: 24.0,
+                      ));
+            },
+          ),
+        ));
   }
 
   // Layout of open page to easily be changed

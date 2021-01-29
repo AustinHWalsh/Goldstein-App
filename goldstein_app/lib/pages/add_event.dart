@@ -37,47 +37,49 @@ class _AddEventPageState extends State<AddEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.note != null ? "Edit Event" : "Add event"),
-      ),
-      key: _key,
-      body: Form(
-        key: _formKey,
-        child: Container(
-          alignment: Alignment.center,
-          child: ListView(
-            children: _openAddPage(),
+        appBar: AppBar(
+          title: Text(widget.note != null ? "Edit Event" : "Add event"),
+        ),
+        key: _key,
+        body: Form(
+          key: _formKey,
+          child: Container(
+            alignment: Alignment.center,
+            child: ListView(
+              children: _openAddPage(),
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.delete),
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                    title: Text("Delete ${widget.note.title}?"),
-                    actions: [
-                      FlatButton(
-                        child: Text("No"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      FlatButton(
-                        child: Text("Yes"),
-                        onPressed: () async {
-                          await eventDBS.removeItem(widget.note.id);
-                          MenuOpen.menuCalendar = true;
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                      )
-                    ],
-                    elevation: 24.0,
-                  ));
-        },
-      ),
-    );
+        floatingActionButton: Visibility(
+          visible: !MenuOpen.adding,
+          child: FloatingActionButton(
+            child: Icon(Icons.delete),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                        title: Text("Delete ${widget.note.title}?"),
+                        actions: [
+                          FlatButton(
+                            child: Text("No"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          FlatButton(
+                            child: Text("Yes"),
+                            onPressed: () async {
+                              await eventDBS.removeItem(widget.note.id);
+                              MenuOpen.menuCalendar = true;
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
+                        elevation: 24.0,
+                      ));
+            },
+          ),
+        ));
   }
 
   // Layout of open page to easily be changed
