@@ -13,6 +13,12 @@ class EventDetailsPage extends StatefulWidget {
 }
 
 class _EventDetailsPageState extends State<EventDetailsPage> {
+  TextStyle headerStyle =
+      new TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+  TextStyle contentStyle = new TextStyle(
+    fontSize: 15,
+  );
+
   // Create the page to view the event and the button to edit if the user
   // is logged in
   @override
@@ -46,10 +52,12 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            widget.event.title,
-          ),
+          Text("Event", style: headerStyle),
+          SizedBox(height: 10.0),
+          Text(widget.event.title, style: contentStyle),
           SizedBox(height: 20.0),
+          Text("Details", style: headerStyle),
+          SizedBox(height: 10.0),
           Text(widget.event.description)
         ],
       ),

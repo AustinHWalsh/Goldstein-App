@@ -3,4 +3,5 @@ class MenuOpen {
   static var menuCalendar = false;
   static var userLogged = false;
   static var adding = false;
+  static DateTime selectedAddingDate = DateTime.now();
 }

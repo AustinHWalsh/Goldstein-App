@@ -29,7 +29,9 @@ class _AddEventPageState extends State<AddEventPage> {
         text: widget.note != null ? widget.note.title : "");
     _description = TextEditingController(
         text: widget.note != null ? widget.note.description : "");
-    _eventDate = DateTime.now();
+    _eventDate = widget.note != null
+        ? widget.note.eventDate
+        : MenuOpen.selectedAddingDate;
     processing = false;
   }
 

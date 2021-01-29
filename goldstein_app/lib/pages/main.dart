@@ -10,6 +10,7 @@ import 'package:goldstein_app/pages/weekly_events.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
 import 'package:goldstein_app/pages/add_event.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:goldstein_app/ui/misc_popups.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -115,6 +116,36 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           )
         ])),
         navigatorButtons(),
+        SliverGrid(
+          delegate: SliverChildListDelegate.fixed([
+            Padding(
+              padding: EdgeInsets.all(5),
+              child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.red, width: 4),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: SizedBox.expand(
+                    child: OutlinedButton(
+                      child: Text("Credits"),
+                      onPressed: () {
+                        CreditPopup().openCreditPop(context);
+                      },
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all<OutlinedBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8))),
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white)),
+                    ),
+                  )),
+            ),
+          ]),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              childAspectRatio: MediaQuery.of(context).size.width /
+                  (MediaQuery.of(context).size.height / 12)),
+        )
       ],
     );
   }
@@ -140,7 +171,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     Function pressed;
     switch (index) {
       case 0:
-        text = Text("Website");
+        text = ListTile(
+          leading: Icon(
+            Icons.launch_rounded,
+            color: Colors.red,
+            size: 35,
+          ),
+          title: Text(
+            "Website",
+            style: TextStyle(inherit: false, color: Colors.red),
+          ),
+        );
         pressed = () {};
         break;
       case 1:
@@ -175,10 +216,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             style: TextStyle(inherit: false, color: Colors.red),
           ),
         );
-        pressed = () {};
+        pressed = () {
+          ContactPopup().openContactPop(context);
+        };
         break;
       case 3:
-        text = Text("Calendar");
+        text = ListTile(
+          leading: Icon(
+            Icons.calendar_today_rounded,
+            color: Colors.red,
+            size: 35,
+          ),
+          title: Text(
+            "Calendar",
+            style: TextStyle(inherit: false, color: Colors.red),
+          ),
+        );
         pressed = () {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => WeeklyEvent()));
