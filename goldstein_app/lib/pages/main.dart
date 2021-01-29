@@ -29,7 +29,6 @@ Future<void> main() async {
   };
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  //FirebaseAuth.instance.signInAnonymously().catchError();
   runApp(MyApp());
 }
 
@@ -41,7 +40,9 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
+    FirebaseAuth.instance.signInAnonymously().catchError((e) {
+      errorReporter.captureException(e);
+    });
     return MaterialApp(
       title: 'Goldstein App',
       theme: ThemeData(
