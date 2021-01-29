@@ -1,5 +1,11 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:goldstein_app/assets/constants.dart';
+import 'package:goldstein_app/assets/error.dart';
 import 'package:goldstein_app/pages/add_announcement.dart';
 import 'package:goldstein_app/ui/menu_open.dart';
 import 'package:intl/intl.dart';
@@ -9,12 +15,21 @@ import 'package:goldstein_app/announcements/announcement.dart';
 import 'package:goldstein_app/pages/weekly_events.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
 import 'package:goldstein_app/pages/add_event.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:goldstein_app/ui/misc_popups.dart';
 
 Future<void> main() async {
+  await SentryFlutter.init((options) {
+    options.dsn = DSN;
+  });
+  FlutterError.onError = (FlutterErrorDetails details) {
+    Zone.current.handleUncaughtError(details.exception, details.stack);
+    if (kReleaseMode) exit(1);
+  };
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  //FirebaseAuth.instance.signInAnonymously().catchError();
   runApp(MyApp());
 }
 
@@ -26,6 +41,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
     return MaterialApp(
       title: 'Goldstein App',
       theme: ThemeData(
@@ -201,7 +217,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           if (await canLaunch(url))
             await launch(url);
           else
-            throw "Could not launch $url";
+            errorReporter.captureMessage("Could not launch $url");
         };
         break;
       case 2:
@@ -238,7 +254,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         };
         break;
       default:
-        throw ("5 boxes elements created");
+        errorReporter.captureMessage("More than 4 tiles created");
     }
     return Padding(
       padding: EdgeInsets.all(5),

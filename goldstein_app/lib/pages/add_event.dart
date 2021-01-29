@@ -152,7 +152,6 @@ class _AddEventPageState extends State<AddEventPage> {
                       if (EventHelpers().compareDate(_eventDate))
                         _eventDate = DateTime(DateTime.now().year,
                             DateTime.now().month, DateTime.now().day);
-                      print(_eventDate);
                       final data = {
                         "title": _title.text,
                         "description": _description.text,

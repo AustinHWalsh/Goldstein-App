@@ -66,8 +66,8 @@ class _LeftMenuState extends State<LeftMenu> {
           leading: Icon(Icons.restaurant_rounded),
           title: Text("Dino"),
           onTap: () {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => DinoMeals()));
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => DinoMeals()));
           },
         ),
         Visibility(
