@@ -148,7 +148,8 @@ class _AddAnnouncePageState extends State<AddAnnouncePage> {
                           _announceDate.month,
                           _announceDate.day,
                           _announceDate.hour,
-                          _announceDate.minute);
+                          _announceDate.minute,
+                          _announceDate.second);
                       final data = {
                         "details": _title.text,
                         "author": _author.text,
