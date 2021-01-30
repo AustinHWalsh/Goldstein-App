@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:goldstein_app/assets/constants.dart' as Constants;
+import 'package:goldstein_app/assets/error.dart';
+import 'package:goldstein_app/dino/dino.dart';
+import 'package:goldstein_app/dino/dino_firestore_service.dart';
+import 'package:goldstein_app/dino/dino_helpers.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +18,8 @@ class _DinoMealsState extends State<DinoMeals> {
   DateTime startDate;
   DateTime endDate;
   PageController _pageController;
+  Map<DateTime, List<dynamic>> _meals;
+  DinoModel _currentMeal;
 
   @override
   void initState() {
@@ -23,6 +29,9 @@ class _DinoMealsState extends State<DinoMeals> {
     endDate = currDate.add(Duration(days: Constants.NUM_DAY_IN_YEAR));
     _pageController = PageController(
         initialPage: int.parse(DateFormat("D").format(currDate)));
+
+    _meals = {};
+    _currentMeal = null;
   }
 
   @override
@@ -80,6 +89,7 @@ class _DinoMealsState extends State<DinoMeals> {
           decoration: BoxDecoration(
               color: Colors.grey[300], border: Border.all(color: Colors.black)),
         ),
+        showMeal("Breakfast"),
         Container(
           child: ListTile(
             title: Text("Lunch"),
@@ -87,6 +97,7 @@ class _DinoMealsState extends State<DinoMeals> {
           decoration: BoxDecoration(
               color: Colors.grey[300], border: Border.all(color: Colors.black)),
         ),
+        showMeal("Lunch"),
         Container(
           child: ListTile(
             title: Text("Dinner"),
@@ -94,7 +105,54 @@ class _DinoMealsState extends State<DinoMeals> {
           decoration: BoxDecoration(
               color: Colors.grey[300], border: Border.all(color: Colors.black)),
         ),
+        showMeal("Dinner"),
       ],
+    );
+  }
+
+  // Shows a meal from the database corresponding to the current day
+  Widget showMeal(String meal) {
+    return StreamBuilder(
+      stream: dinoDBS.streamList(),
+      builder: (context, snapshot) {
+        String text = "";
+        if (snapshot.hasData) {
+          List<DinoModel> allMeals = snapshot.data;
+          if (allMeals.isNotEmpty) {
+            _meals = DinoHelpers().groupEvents(allMeals);
+            DateTime _day =
+                DateTime(currDate.year, currDate.month, currDate.day).toLocal();
+            _currentMeal = (_meals[_day] == null) ? null : _meals[_day][0];
+            if (_currentMeal != null) {
+              switch (meal) {
+                case "Breakfast":
+                  text = _currentMeal.breakfast.toString();
+                  break;
+                case "Lunch":
+                  text = _currentMeal.lunch.toString();
+                  break;
+                case "Dinner":
+                  text = _currentMeal.dinner.toString();
+                  break;
+                default:
+                  errorReporter.captureMessage("Invalid dino string passed");
+              }
+            }
+          } else {
+            _meals = {};
+            _currentMeal = null;
+          }
+        }
+        return Visibility(
+          visible: _currentMeal != null,
+          child: Container(
+            child: ListTile(
+              title: Text(text),
+            ),
+            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+          ),
+        );
+      },
     );
   }
 }
