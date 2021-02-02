@@ -23,12 +23,12 @@ Future<void> main() async {
   await SentryFlutter.init((options) {
     options.dsn = DSN;
   });
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   FlutterError.onError = (FlutterErrorDetails details) {
     Zone.current.handleUncaughtError(details.exception, details.stack);
     if (kReleaseMode) exit(1);
   };
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -362,6 +362,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   // If the provided url cannot be opened, display a popup to alert the user
   Future<void> _openInvalidUrl() async {
+    errorReporter.captureMessage("Invalid link provided");
     return showDialog<void>(
         context: context,
         builder: (BuildContext context) {

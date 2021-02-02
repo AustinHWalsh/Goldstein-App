@@ -16,7 +16,15 @@ class ContactPopup {
             style: _customText,
           ),
           Text(
-            "Not sure what else",
+            "Emergency: 9385 6666",
+            style: _customText,
+          ),
+          Text(
+            "UNSW IT: 9385 1333",
+            style: _customText,
+          ),
+          Text(
+            "Accommodation: 9385 4346",
             style: _customText,
           ),
         ],
