@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         );
         pressed = () async {
-          const url = "https://www.facebook.com/groups/121650729274806/";
+          const url = "https://www.facebook.com/groups/242312270845000";
           if (await canLaunch(url))
             await launch(url);
           else
