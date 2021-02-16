@@ -103,7 +103,7 @@ class _CalendarPageState extends State<CalendarPage> {
           CalendarStyle(outsideDaysVisible: false, markersColor: Colors.blue),
       headerStyle:
           HeaderStyle(centerHeaderTitle: true, formatButtonVisible: false),
-      onDaySelected: (date, events) {
+      onDaySelected: (date, events, holidays) {
         MenuOpen.selectedAddingDate = date;
         setState(() {
           _selectedEvents = events;
