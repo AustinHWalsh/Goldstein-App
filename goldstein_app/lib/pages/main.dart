@@ -18,7 +18,6 @@ import 'package:goldstein_app/pages/add_event.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:goldstein_app/ui/misc_popups.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 Future<void> main() async {
   await SentryFlutter.init((options) {
@@ -187,6 +186,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget createButton(int index) {
     Widget text;
     Function pressed;
+    TextStyle buttonStyle = TextStyle(
+        inherit: false,
+        color: Colors.red,
+        fontSize: MediaQuery.of(context).size.width / 35);
     switch (index) {
       case 0:
         text = ListTile(
@@ -195,27 +198,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: Colors.red,
             size: 35,
           ),
-          title: AutoSizeText(
-            "Website",
-            style: TextStyle(inherit: false, color: Colors.red),
-            maxLines: 1,
-          ),
+          title: Text("Website", style: buttonStyle),
         );
         pressed = () {};
         break;
       case 1:
         text = ListTile(
-          leading: Image.asset(
-            "assets/facebook.png",
-            height: 35,
-            width: 35,
-          ),
-          title: AutoSizeText(
-            "Facebook",
-            style: TextStyle(inherit: false, color: Colors.red),
-            maxLines: 1,
-          ),
-        );
+            leading: Image.asset(
+              "assets/facebook.png",
+              height: 35,
+              width: 35,
+            ),
+            title: Text("Facebook", style: buttonStyle));
         pressed = () async {
           const url = "https://www.facebook.com/groups/242312270845000";
           if (await canLaunch(url))
@@ -231,11 +225,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: Colors.red,
             size: 35,
           ),
-          title: AutoSizeText(
-            "Contacts",
-            style: TextStyle(inherit: false, color: Colors.red),
-            maxLines: 1,
-          ),
+          title: Text("Contacts", style: buttonStyle),
         );
         pressed = () {
           ContactPopup().openContactPop(context);
@@ -248,11 +238,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: Colors.red,
             size: 35,
           ),
-          title: AutoSizeText(
-            "Calendar",
-            style: TextStyle(inherit: false, color: Colors.red),
-            maxLines: 1,
-          ),
+          title: Text("Calendar", style: buttonStyle),
         );
         pressed = () {
           Navigator.pushReplacement(
@@ -265,22 +251,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Padding(
       padding: EdgeInsets.all(5),
       child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.red, width: 4),
-              borderRadius: BorderRadius.circular(12)),
-          child: SizedBox.expand(
-            child: OutlinedButton(
-              child: text,
-              onPressed: pressed,
-              style: ButtonStyle(
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8))),
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white)),
-            ),
-          )),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.red, width: 4),
+            borderRadius: BorderRadius.circular(12)),
+        child: SizedBox.expand(
+          child: OutlinedButton(
+            child: text,
+            onPressed: pressed,
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8))),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.white)),
+          ),
+        ),
+      ),
     );
   }
 
