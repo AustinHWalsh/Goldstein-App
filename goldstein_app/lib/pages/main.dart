@@ -18,6 +18,7 @@ import 'package:goldstein_app/pages/add_event.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:goldstein_app/ui/misc_popups.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 Future<void> main() async {
   await SentryFlutter.init((options) {
@@ -194,9 +195,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: Colors.red,
             size: 35,
           ),
-          title: Text(
+          title: AutoSizeText(
             "Website",
             style: TextStyle(inherit: false, color: Colors.red),
+            maxLines: 1,
           ),
         );
         pressed = () {};
@@ -208,13 +210,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             height: 35,
             width: 35,
           ),
-          title: Text(
+          title: AutoSizeText(
             "Facebook",
             style: TextStyle(inherit: false, color: Colors.red),
+            maxLines: 1,
           ),
         );
         pressed = () async {
-          const url = "https://www.facebook.com/groups/121650729274806/";
+          const url = "https://www.facebook.com/groups/242312270845000";
           if (await canLaunch(url))
             await launch(url);
           else
@@ -228,9 +231,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: Colors.red,
             size: 35,
           ),
-          title: Text(
+          title: AutoSizeText(
             "Contacts",
             style: TextStyle(inherit: false, color: Colors.red),
+            maxLines: 1,
           ),
         );
         pressed = () {
@@ -244,9 +248,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: Colors.red,
             size: 35,
           ),
-          title: Text(
+          title: AutoSizeText(
             "Calendar",
             style: TextStyle(inherit: false, color: Colors.red),
+            maxLines: 1,
           ),
         );
         pressed = () {
