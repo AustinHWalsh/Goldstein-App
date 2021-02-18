@@ -194,11 +194,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       case 0:
         text = ListTile(
           leading: Icon(
-            Icons.launch_rounded,
+            Icons.camera_alt_rounded,
             color: Colors.red,
             size: 35,
           ),
-          title: Text("Website", style: buttonStyle),
+          title: Text("Photos", style: buttonStyle),
         );
         pressed = () {};
         break;
