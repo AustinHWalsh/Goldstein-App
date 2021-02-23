@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goldstein_app/events/event.dart';
-import 'package:goldstein_app/pages/add_event.dart';
-import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 import 'package:goldstein_app/ui/misc_popups.dart';
 import 'package:url_launcher/url_launcher.dart';
 
