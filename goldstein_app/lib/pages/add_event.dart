@@ -17,6 +17,7 @@ class _AddEventPageState extends State<AddEventPage> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
+  TextEditingController _url;
   DateTime _eventDate;
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
@@ -29,6 +30,8 @@ class _AddEventPageState extends State<AddEventPage> {
         text: widget.note != null ? widget.note.title : "");
     _description = TextEditingController(
         text: widget.note != null ? widget.note.description : "");
+    _url =
+        TextEditingController(text: widget.note != null ? widget.note.url : "");
     _eventDate = widget.note != null
         ? widget.note.eventDate
         : MenuOpen.selectedAddingDate;
@@ -71,7 +74,6 @@ class _AddEventPageState extends State<AddEventPage> {
                             onPressed: () async {
                               await eventDBS.removeItem(widget.note.id);
                               MenuOpen.menuCalendar = true;
-                              Navigator.pop(context);
                               Navigator.pop(context);
                               Navigator.pop(context);
                             },
@@ -117,6 +119,18 @@ class _AddEventPageState extends State<AddEventPage> {
         ),
       ),
       const SizedBox(height: 10.0),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: TextFormField(
+          controller: _url,
+          style: style,
+          decoration: InputDecoration(
+              labelText: "URL",
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+        ),
+      ),
+      const SizedBox(height: 10.0),
       ListTile(
         title: Text("Date (YYYY-MM-DD)"),
         subtitle: Text(
@@ -155,6 +169,7 @@ class _AddEventPageState extends State<AddEventPage> {
                       final data = {
                         "title": _title.text,
                         "description": _description.text,
+                        "url": _url.text,
                         "event_date": _eventDate
                       };
                       if (widget.note != null) {

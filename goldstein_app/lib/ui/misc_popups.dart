@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goldstein_app/assets/error.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 TextStyle _customText = TextStyle(fontSize: 14, fontWeight: FontWeight.normal);
@@ -57,5 +58,23 @@ class CreditPopup {
           ],
         ),
         buttons: []).show();
+  }
+}
+
+// Displays the InvalidURL popup if a url that is attempted to be opened doesnt
+// exist
+class InvalidURL {
+  // If the provided url cannot be opened, display a popup to alert the user
+  Future<void> openInvalidUrl(context) async {
+    errorReporter.captureMessage("Invalid link provided");
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Invalid Url"),
+            content: Text(
+                "The provided url is invalid, please contact the author of the announcement"),
+          );
+        });
   }
 }

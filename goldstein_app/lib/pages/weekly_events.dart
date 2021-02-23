@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:goldstein_app/pages/add_event.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
 import 'package:goldstein_app/events/event.dart';
 import 'package:goldstein_app/pages/view_event.dart';
 import 'package:goldstein_app/events/event_firestore_service.dart';
 import 'package:goldstein_app/events/event_helpers.dart';
+import 'package:goldstein_app/ui/menu_open.dart';
 import 'package:intl/intl.dart';
 import 'package:goldstein_app/assets/constants.dart' as Constants;
 
@@ -163,6 +165,18 @@ class _WeeklyEventState extends State<WeeklyEvent> {
                             builder: (_) => EventDetailsPage(
                                   event: event,
                                 )))
+                  },
+                  onLongPress: () async {
+                    if (MenuOpen.userLogged) {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AddEventPage(
+                              key: widget.key,
+                              note: event,
+                            ),
+                          ));
+                    }
                   },
                 ),
               ))
