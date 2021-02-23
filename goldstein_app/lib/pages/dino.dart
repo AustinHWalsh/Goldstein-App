@@ -129,10 +129,14 @@ class _DinoMealsState extends State<DinoMeals> {
                   text = _currentMeal.breakfast.toString();
                   break;
                 case "Lunch":
-                  text = _currentMeal.lunch.toString();
+                  text = _currentMeal.lunch
+                      .toString()
+                      .replaceFirst(RegExp(', '), '\n');
                   break;
                 case "Dinner":
-                  text = _currentMeal.dinner.toString();
+                  text = _currentMeal.dinner
+                      .toString()
+                      .replaceFirst(RegExp(', '), '\n');
                   break;
                 default:
                   errorReporter.captureMessage("Invalid dino string passed");
