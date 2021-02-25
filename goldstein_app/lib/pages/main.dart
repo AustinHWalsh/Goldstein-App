@@ -200,7 +200,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           title: Text("Photos", style: buttonStyle),
         );
-        pressed = () {};
+        pressed = () async {
+          const url = "https://www.facebook.com/goldiegatorsphotobooth";
+          if (await canLaunch(url))
+            await launch(url);
+          else
+            errorReporter.captureMessage("Could not launch $url");
+        };
         break;
       case 1:
         text = ListTile(
