@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     TextStyle buttonStyle = TextStyle(
         inherit: false,
         color: Colors.red,
-        fontSize: MediaQuery.of(context).size.width / 35);
+        fontSize: MediaQuery.of(context).size.width / 30);
     switch (index) {
       case 0:
         text = ListTile(
@@ -198,7 +198,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: Colors.red,
             size: 35,
           ),
-          title: Text("Photos", style: buttonStyle),
+          title: Text(
+            "Photos",
+            style: buttonStyle,
+            softWrap: false,
+            overflow: TextOverflow.visible,
+          ),
         );
         pressed = () async {
           const url = "https://www.facebook.com/goldiegatorsphotobooth";
@@ -215,7 +220,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               height: 35,
               width: 35,
             ),
-            title: Text("Facebook", style: buttonStyle));
+            title: Text(
+              "Facebook",
+              style: buttonStyle,
+              softWrap: false,
+              overflow: TextOverflow.visible,
+            ));
         pressed = () async {
           const url = "https://www.facebook.com/groups/242312270845000";
           if (await canLaunch(url))
@@ -231,7 +241,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: Colors.red,
             size: 35,
           ),
-          title: Text("Contacts", style: buttonStyle),
+          title: Text(
+            "Contacts",
+            style: buttonStyle,
+            softWrap: false,
+            overflow: TextOverflow.visible,
+          ),
         );
         pressed = () {
           ContactPopup().openContactPop(context);
@@ -244,7 +259,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: Colors.red,
             size: 35,
           ),
-          title: Text("Calendar", style: buttonStyle),
+          title: Text(
+            "Calendar",
+            style: buttonStyle,
+            softWrap: false,
+            overflow: TextOverflow.visible,
+          ),
         );
         pressed = () {
           Navigator.pushReplacement(

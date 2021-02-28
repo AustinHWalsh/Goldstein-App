@@ -77,14 +77,50 @@ class _WeeklyEventState extends State<WeeklyEvent> {
         Container(
           color: Colors.red,
           padding: EdgeInsets.symmetric(vertical: 8.0),
-          child: Row(
+          child: Stack(
             children: <Widget>[
+              Container(
+                child: FlatButton.icon(
+                  icon: Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Colors.white,
+                  ),
+                  color: Colors.red,
+                  onPressed: () {
+                    _pageController.previousPage(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeInOut);
+                  },
+                  label: Text(""),
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                ),
+                alignment: Alignment.centerLeft,
+              ),
               Text(
                 weekString(_openDay),
                 style: TextStyle(color: Colors.white),
-              )
+              ),
+              Container(
+                child: FlatButton.icon(
+                  icon: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: Colors.white,
+                  ),
+                  color: Colors.red,
+                  onPressed: () {
+                    _pageController.nextPage(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeInOut);
+                  },
+                  label: Text(""),
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                ),
+                alignment: Alignment.centerRight,
+              ),
             ],
-            mainAxisAlignment: MainAxisAlignment.center,
+            alignment: FractionalOffset.center,
           ),
           height: MediaQuery.of(context).size.height / 12,
         ),
