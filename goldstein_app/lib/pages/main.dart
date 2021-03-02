@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         );
         pressed = () async {
           const fallbackUrl = "https://www.facebook.com/goldiegatorsphotobooth";
-          const fbProtocolUrl = "fb://page/563316737106569";
+          const fbProtocolUrl = "fb://page/?id=563316737106569";
           try {
             bool launched = await launch(fbProtocolUrl, forceSafariVC: false);
             if (!launched) await launch(fallbackUrl, forceSafariVC: false);
