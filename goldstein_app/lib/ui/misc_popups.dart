@@ -13,7 +13,7 @@ class ContactPopup {
       content: Column(
         children: <Widget>[
           Text(
-            "Duty Tutor: 9386 9786",
+            "Duty Tutor: 9385 9786",
             style: _customText,
           ),
           Text(

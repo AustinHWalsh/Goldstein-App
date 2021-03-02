@@ -206,11 +206,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         );
         pressed = () async {
-          const url = "https://www.facebook.com/goldiegatorsphotobooth";
-          if (await canLaunch(url))
-            await launch(url);
-          else
-            errorReporter.captureMessage("Could not launch $url");
+          const fallbackUrl = "https://www.facebook.com/goldiegatorsphotobooth";
+          const fbProtocolUrl = "fb://page/563316737106569";
+          try {
+            bool launched = await launch(fbProtocolUrl, forceSafariVC: false);
+            if (!launched) await launch(fallbackUrl, forceSafariVC: false);
+          } catch (e) {
+            await launch(fallbackUrl, forceSafariVC: false);
+          }
         };
         break;
       case 1:
@@ -227,11 +230,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               overflow: TextOverflow.visible,
             ));
         pressed = () async {
-          const url = "https://www.facebook.com/groups/242312270845000";
-          if (await canLaunch(url))
-            await launch(url);
-          else
-            errorReporter.captureMessage("Could not launch $url");
+          const fallbackUrl = "https://www.facebook.com/groups/242312270845000";
+          const fbProtocolUrl =
+              "intent://www.facebook.com/groups/242312270845000/#Intent;package=com.facebook.katana;scheme=https;end";
+          try {
+            bool launched = await launch(fbProtocolUrl,
+                forceSafariVC: false, forceWebView: false);
+            if (!launched)
+              await launch(fallbackUrl,
+                  forceSafariVC: false, forceWebView: false);
+          } catch (e) {
+            await launch(fallbackUrl,
+                forceSafariVC: false, forceWebView: false);
+          }
         };
         break;
       case 2:
