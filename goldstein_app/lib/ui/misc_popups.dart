@@ -48,7 +48,7 @@ class CreditPopup {
               style: _customText,
             ),
             Text(
-              "Idea by Summmer Senthil-Kumar",
+              "Idea by Summer Senthil-Kumar",
               style: _customText,
             ),
             Text(
