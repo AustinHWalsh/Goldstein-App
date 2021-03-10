@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:goldstein_app/assets/constants.dart';
 import 'package:goldstein_app/assets/error.dart';
 import 'package:goldstein_app/pages/add_announcement.dart';
+import 'package:goldstein_app/pages/dino.dart';
 import 'package:goldstein_app/ui/menu_open.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -230,18 +231,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               overflow: TextOverflow.visible,
             ));
         pressed = () async {
-          const fallbackUrl = "https://www.facebook.com/groups/242312270845000";
-          const fbProtocolUrl =
-              "intent://www.facebook.com/groups/242312270845000/#Intent;package=com.facebook.katana;scheme=https;end";
-          try {
-            bool launched = await launch(fbProtocolUrl,
-                forceSafariVC: false, forceWebView: false);
-            if (!launched)
-              await launch(fallbackUrl,
-                  forceSafariVC: false, forceWebView: false);
-          } catch (e) {
-            await launch(fallbackUrl,
-                forceSafariVC: false, forceWebView: false);
+          const url = "https://www.facebook.com/groups/242312270845000";
+          if (await canLaunch(url)) {
+            final bool nativeAppLaunchSucceeded = await launch(
+              url,
+              forceSafariVC: false,
+              universalLinksOnly: true,
+            );
+            if (!nativeAppLaunchSucceeded) {
+              await launch(
+                url,
+                forceSafariVC: true,
+              );
+            }
           }
         };
         break;
@@ -266,12 +268,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       case 3:
         text = ListTile(
           leading: Icon(
-            Icons.calendar_today_rounded,
+            Icons.restaurant_rounded,
             color: Colors.red,
             size: 35,
           ),
           title: Text(
-            "Calendar",
+            "Dino",
             style: buttonStyle,
             softWrap: false,
             overflow: TextOverflow.visible,
@@ -279,7 +281,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         );
         pressed = () {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => WeeklyEvent()));
+              context, MaterialPageRoute(builder: (context) => DinoMeals()));
         };
         break;
       default:
