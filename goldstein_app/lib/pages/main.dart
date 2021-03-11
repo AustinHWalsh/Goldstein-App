@@ -357,7 +357,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           if (await canLaunch(_url))
                             await launch(_url);
                           else {
-                            await _openInvalidUrl();
+                            await InvalidURL().openInvalidUrl(context);
                           }
                         }
                       },
@@ -389,19 +389,5 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         )
       ],
     );
-  }
-
-  // If the provided url cannot be opened, display a popup to alert the user
-  Future<void> _openInvalidUrl() async {
-    errorReporter.captureMessage("Invalid link provided");
-    return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Invalid Url"),
-            content: Text(
-                "The provided url is invalid, please contact the author of the announcement"),
-          );
-        });
   }
 }

@@ -5,8 +5,9 @@ class EventModel extends DatabaseService {
   final String title;
   final String description;
   final DateTime eventDate;
+  final String url;
 
-  EventModel({this.id, this.title, this.description, this.eventDate})
+  EventModel({this.id, this.title, this.description, this.eventDate, this.url})
       : super(id);
 
   factory EventModel.fromMap(Map data) {
@@ -14,6 +15,7 @@ class EventModel extends DatabaseService {
       title: data['title'],
       description: data['description'],
       eventDate: data['event_date'],
+      url: data['url'],
     );
   }
 
@@ -23,6 +25,7 @@ class EventModel extends DatabaseService {
       title: data['title'],
       description: data['description'],
       eventDate: data['event_date'].toDate(),
+      url: data['url'],
     );
   }
 }

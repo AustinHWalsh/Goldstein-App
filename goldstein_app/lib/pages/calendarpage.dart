@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goldstein_app/pages/add_event.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 import 'package:goldstein_app/events/event.dart';
@@ -173,6 +174,18 @@ class _CalendarPageState extends State<CalendarPage> {
                             builder: (_) => EventDetailsPage(
                                   event: event,
                                 )))
+                  },
+                  onLongPress: () async {
+                    if (MenuOpen.userLogged) {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AddEventPage(
+                              key: widget.key,
+                              note: event,
+                            ),
+                          ));
+                    }
                   },
                 ),
               ))
