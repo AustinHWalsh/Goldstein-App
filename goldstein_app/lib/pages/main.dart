@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:goldstein_app/assets/constants.dart';
 import 'package:goldstein_app/assets/error.dart';
 import 'package:goldstein_app/pages/add_announcement.dart';
+import 'package:goldstein_app/pages/dino.dart';
 import 'package:goldstein_app/ui/menu_open.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -258,12 +259,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       case 3:
         text = ListTile(
           leading: Icon(
-            Icons.calendar_today_rounded,
+            Icons.restaurant_sharp,
             color: Colors.red,
             size: 35,
           ),
           title: Text(
-            "Calendar",
+            "Dino",
             style: buttonStyle,
             softWrap: false,
             overflow: TextOverflow.visible,
@@ -271,7 +272,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         );
         pressed = () {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => WeeklyEvent()));
+              context, MaterialPageRoute(builder: (context) => DinoMeals()));
         };
         break;
       default:
