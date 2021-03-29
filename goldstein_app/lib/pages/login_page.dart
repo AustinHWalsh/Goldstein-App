@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goldstein_app/pages/main.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 import 'package:goldstein_app/assets/password.dart';
@@ -12,7 +13,7 @@ class LoginMenu {
   openPopup(context) {
     Alert(
         context: context,
-        title: "Login",
+        title: "HC Login",
         content: Column(
           children: <Widget>[
             Form(
@@ -22,7 +23,7 @@ class LoginMenu {
                 validator: (value) {
                   if (value.isEmpty)
                     return "Please enter a password";
-                  else if (_hasher.verifyPass(value))
+                  else if (_hasher.verifyPass(true, value))
                     return "Incorrect password";
                   return null;
                 },
@@ -45,13 +46,18 @@ class LoginMenu {
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                Navigator.pop(context);
-                Navigator.pop(context);
-                MenuOpen.menuCalendar = true;
-                MenuOpen.userLogged = true;
+                executeHCLogin(context);
               }
             },
           )
         ]).show();
+  }
+
+  // when the user is logged in via HC login - allow editing of objects
+  void executeHCLogin(context) {
+    Navigator.pop(context);
+    Navigator.pop(context);
+    MenuOpen.menuCalendar = true;
+    MenuOpen.userLogged = true;
   }
 }

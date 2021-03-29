@@ -7,21 +7,24 @@ import 'package:flutter/services.dart';
 import 'package:goldstein_app/assets/constants.dart';
 import 'package:goldstein_app/assets/error.dart';
 import 'package:goldstein_app/pages/add_announcement.dart';
+import 'package:goldstein_app/pages/auth_page.dart';
 import 'package:goldstein_app/pages/dino.dart';
+import 'package:goldstein_app/pages/login_page.dart';
 import 'package:goldstein_app/ui/menu_open.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:goldstein_app/announcements/announce_firestore_service.dart';
 import 'package:goldstein_app/announcements/announcement.dart';
-import 'package:goldstein_app/pages/weekly_events.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
 import 'package:goldstein_app/pages/add_event.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:sentry_flutter/sentry_flutter.dart' as Sentry;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:goldstein_app/ui/misc_popups.dart';
 
+final FirebaseAuth _auth = FirebaseAuth.instance;
+final loginMenu = new LoginMenu();
 Future<void> main() async {
-  await SentryFlutter.init((options) {
+  await Sentry.SentryFlutter.init((options) {
     options.dsn = DSN;
   });
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +36,20 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+// handle the opening of the app
+// allow user to skip login if persistent
+Widget handleLanding() {
+  return StreamBuilder<User>(
+    stream: _auth.authStateChanges(),
+    builder: (BuildContext context, snapshot) {
+      if (snapshot.hasData && (!snapshot.data.isAnonymous)) {
+        return HomePage(title: 'Goldstein College');
+      }
+      return SignupPage();
+    },
+  );
+}
+
 class MyApp extends StatelessWidget {
   // Root
   @override
@@ -41,16 +58,13 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    FirebaseAuth.instance.signInAnonymously().catchError((e) {
-      errorReporter.captureException(e);
-    });
     return MaterialApp(
       title: 'Goldstein App',
       theme: ThemeData(
         primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(title: 'Goldstein College'),
+      home: handleLanding(),
       routes: {
         "add_event": (_) => AddEventPage(),
       },
