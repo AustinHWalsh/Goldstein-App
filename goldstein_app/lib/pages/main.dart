@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
       errorReporter.captureException(e);
     });
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Goldstein App',
       theme: ThemeData(
         primarySwatch: Colors.red,
