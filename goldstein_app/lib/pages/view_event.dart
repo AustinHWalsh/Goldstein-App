@@ -19,8 +19,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     fontSize: 15,
   );
 
-  // Create the page to view the event and the button to edit if the user
-  // is logged in
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +29,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     );
   }
 
+  // Create a page that shows the event's name, details and a url (if provided)
   Widget _eventPage() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),

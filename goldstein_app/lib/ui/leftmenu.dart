@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goldstein_app/pages/dino.dart';
+import 'package:goldstein_app/pages/home.dart';
 import 'package:goldstein_app/ui/menu_open.dart' show MenuOpen;
 import 'package:goldstein_app/pages/main.dart';
 import 'package:goldstein_app/pages/calendarpage.dart';
