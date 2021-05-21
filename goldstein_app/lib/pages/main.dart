@@ -13,7 +13,6 @@ import 'package:intl/intl.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:goldstein_app/announcements/announce_firestore_service.dart';
 import 'package:goldstein_app/announcements/announcement.dart';
-import 'package:goldstein_app/pages/weekly_events.dart';
 import 'package:goldstein_app/ui/leftmenu.dart';
 import 'package:goldstein_app/pages/add_event.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';

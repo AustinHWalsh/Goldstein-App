@@ -65,11 +65,11 @@ class _AddEventPageState extends State<AddEventPage> {
                   builder: (_) => AlertDialog(
                         title: Text("Delete ${widget.note.title}?"),
                         actions: [
-                          FlatButton(
+                          TextButton(
                             child: Text("No"),
                             onPressed: () => Navigator.pop(context),
                           ),
-                          FlatButton(
+                          TextButton(
                             child: Text("Yes"),
                             onPressed: () async {
                               await eventDBS.removeItem(widget.note.id);
