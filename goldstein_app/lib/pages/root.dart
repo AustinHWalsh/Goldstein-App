@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:goldstein_app/assets/password.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
+import 'home.dart';
 
 class MyRoot extends StatefulWidget {
   @override
@@ -49,9 +52,21 @@ class _MyRootState extends State<MyRoot> {
               ),
             ),
             SizedBox(height: 10),
-            TextButton(
-              onPressed: () {},
-              child: child,
+            DialogButton(
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  _formKey.currentState.save();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage(title: 'Goldstein College')));
+                }
+              },
+              child: Text(
+                "Login",
+                style: TextStyle(color: Colors.white),
+              ),
             )
           ],
         ),
