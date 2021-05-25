@@ -8,6 +8,7 @@ import 'package:goldstein_app/assets/constants.dart';
 import 'package:goldstein_app/assets/error.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:goldstein_app/pages/add_event.dart';
+import 'package:goldstein_app/pages/root.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'home.dart';
 
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(title: 'Goldstein College'),
+      home: MyRoot(),
       routes: {
         "add_event": (_) => AddEventPage(),
       },
