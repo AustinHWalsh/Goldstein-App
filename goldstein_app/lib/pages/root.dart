@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:goldstein_app/userIDs/userIDs_firestore_service.dart';
@@ -114,7 +115,7 @@ class _MyRootState extends State<MyRoot> {
       }
     } on PlatformException {
       errorReporter.captureMessage("Failed to get device data");
-      return;
+      throw PlatformException;
     }
     setState(() {
       _deviceId = uniqID;
@@ -124,11 +125,14 @@ class _MyRootState extends State<MyRoot> {
   // Determine if the user's ID exists in the firebase
   // If it does, load the home page, otherwise load the login page
   Future<void> _userLogged() async {
-    if (idDBS.collection.contains(_deviceId)) {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomePage(title: 'Goldstein College')));
-    }
+    idDBS.db.collection('userIDs').doc(_deviceId).get().then((doc) {
+      if (doc.exists)
+        Timer.run(() {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePage(title: 'Goldstein College')));
+        });
+    });
   }
 }
