@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:goldstein_app/userIDs/userIDs_firestore_service.dart';
-import 'package:goldstein_app/userIDs/userIDs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:goldstein_app/assets/error.dart';
 import 'package:goldstein_app/assets/password.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'home.dart';
-import 'main.dart';
+
+enum LoggedProperty { loading, noLogin, loggedIn }
 
 class MyRoot extends StatefulWidget {
   @override
@@ -21,6 +21,7 @@ class _MyRootState extends State<MyRoot> {
   final _password = TextEditingController();
   final _hasher = PasswordHash();
   String _deviceId = "";
+  LoggedProperty _loginState = LoggedProperty.loading;
 
   @override
   void initState() {
@@ -35,7 +36,33 @@ class _MyRootState extends State<MyRoot> {
 
   @override
   Widget build(BuildContext context) {
-    return oneTimePage();
+    switch (_loginState) {
+      case LoggedProperty.loading:
+        return Container(
+          child: Center(child: CircularProgressIndicator()),
+          color: Colors.white,
+        );
+      case LoggedProperty.noLogin:
+        return oneTimePage();
+      case LoggedProperty.loggedIn:
+        WidgetsBinding.instance.addPostFrameCallback((_) =>
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        HomePage(title: 'Goldstein College'))));
+        return Container(
+          child: Center(child: CircularProgressIndicator()),
+          color: Colors.white,
+        );
+      default:
+        errorReporter
+            .captureMessage("Error occured when logging in $_deviceId");
+        return Container(
+          child: Center(child: Text("Error, please try re-enter the app")),
+          color: Colors.white,
+        );
+    }
   }
 
   // A page that displays the password field and an enter button
@@ -123,16 +150,13 @@ class _MyRootState extends State<MyRoot> {
   }
 
   // Determine if the user's ID exists in the firebase
-  // If it does, load the home page, otherwise load the login page
-  Future<void> _userLogged() async {
+  // If it does, set _loginState to logged in, otherwise not logged in
+  _userLogged() async {
     idDBS.db.collection('userIDs').doc(_deviceId).get().then((doc) {
-      if (doc.exists)
-        Timer.run(() {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => HomePage(title: 'Goldstein College')));
-        });
+      setState(() {
+        _loginState =
+            (doc.exists) ? LoggedProperty.loggedIn : LoggedProperty.noLogin;
+      });
     });
   }
 }
