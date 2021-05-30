@@ -22,7 +22,7 @@ class LoginMenu {
                 validator: (value) {
                   if (value.isEmpty)
                     return "Please enter a password";
-                  else if (_hasher.verifyPass(value))
+                  else if (_hasher.verifyPass(true, value))
                     return "Incorrect password";
                   return null;
                 },

@@ -24,21 +24,20 @@ dependencies:
   flutter:
     sdk: flutter
   table_calendar: ^2.2.3
-  firebase_helpers: ^0.2.1
-  firebase_core: ^0.5.0
-  intl: ^0.16.1
   rflutter_alert: ^1.0.3
   crypto: ^2.1.5
   url_launcher: ^5.7.10
-  firebase_auth: ^0.18.4+1
   sentry_flutter: ^4.0.4
+  device_info: ^2.0.1
+  firebase_core: ^0.5.0
+  firebase_auth: ^0.18.4+1
+  firebase_helpers: ^0.2.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   
   flutter_launcher_icons: ^0.8.1
-  #flutter_form_builder: ^3.14.0
 
 # Package to create the icons of the app
 # Can be changed by changing source path

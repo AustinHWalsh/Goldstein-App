@@ -63,11 +63,11 @@ class _AddAnnouncePageState extends State<AddAnnouncePage> {
                   builder: (_) => AlertDialog(
                         title: Text("Delete announcement?"),
                         actions: [
-                          FlatButton(
+                          TextButton(
                             child: Text("No"),
                             onPressed: () => Navigator.pop(context),
                           ),
-                          FlatButton(
+                          TextButton(
                             child: Text("Yes"),
                             onPressed: () async {
                               await announcementDBS.removeItem(widget.note.id);

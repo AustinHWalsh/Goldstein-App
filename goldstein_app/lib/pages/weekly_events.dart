@@ -80,20 +80,18 @@ class _WeeklyEventState extends State<WeeklyEvent> {
           child: Stack(
             children: <Widget>[
               Container(
-                child: FlatButton.icon(
+                child: TextButton.icon(
                   icon: Icon(
                     Icons.arrow_back_ios_rounded,
                     color: Colors.white,
                   ),
-                  color: Colors.red,
+                  style: TextButton.styleFrom(primary: Colors.red),
                   onPressed: () {
                     _pageController.previousPage(
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.easeInOut);
                   },
                   label: Text(""),
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
                 ),
                 alignment: Alignment.centerLeft,
               ),
@@ -102,20 +100,18 @@ class _WeeklyEventState extends State<WeeklyEvent> {
                 style: TextStyle(color: Colors.white),
               ),
               Container(
-                child: FlatButton.icon(
+                child: TextButton.icon(
                   icon: Icon(
                     Icons.arrow_forward_ios_rounded,
                     color: Colors.white,
                   ),
-                  color: Colors.red,
+                  style: TextButton.styleFrom(primary: Colors.red),
                   onPressed: () {
                     _pageController.nextPage(
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.easeInOut);
                   },
                   label: Text(""),
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
                 ),
                 alignment: Alignment.centerRight,
               ),

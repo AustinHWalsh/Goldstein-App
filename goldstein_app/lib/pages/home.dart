@@ -1,65 +1,21 @@
-import 'dart:async';
-import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:goldstein_app/assets/constants.dart';
-<<<<<<< HEAD
+import 'package:goldstein_app/announcements/announce_firestore_service.dart';
+import 'package:goldstein_app/announcements/announcement.dart';
 import 'package:goldstein_app/assets/error.dart';
 import 'package:goldstein_app/pages/add_announcement.dart';
-import 'package:goldstein_app/pages/dino.dart';
+import 'package:goldstein_app/ui/leftmenu.dart';
 import 'package:goldstein_app/ui/menu_open.dart';
+import 'package:goldstein_app/ui/misc_popups.dart';
 import 'package:intl/intl.dart';
-=======
->>>>>>> main
-import 'package:firebase_core/firebase_core.dart';
-import 'package:goldstein_app/assets/error.dart';
-import 'package:goldstein_app/pages/add_event.dart';
-import 'package:goldstein_app/pages/root.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dino.dart';
 
-Future<void> main() async {
-  // setup sentry error reporting
-  await SentryFlutter.init((options) {
-    options.dsn = DSN;
-  });
-  WidgetsFlutterBinding.ensureInitialized();
-  // setup firebase app and flutter error reporting
-  await Firebase.initializeApp();
-  FlutterError.onError = (FlutterErrorDetails details) {
-    Zone.current.handleUncaughtError(details.exception, details.stack);
-    if (kReleaseMode) exit(1);
-  };
-  runApp(MyApp());
+enum HomeButton {
+  photos,
+  facebook,
+  contacts,
+  dino,
 }
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // lock to up and down only
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    FirebaseAuth.instance.signInAnonymously().catchError((e) {
-      errorReporter.captureException(e);
-    });
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Goldstein App',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyRoot(),
-      routes: {
-        "add_event": (_) => AddEventPage(),
-      },
-    );
-  }
-}
-<<<<<<< HEAD
 
 // Home Page
 class HomePage extends StatefulWidget {
@@ -94,6 +50,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  // Main widgets of the homepage
   Widget homepage() {
     return CustomScrollView(
       slivers: <Widget>[
@@ -174,10 +131,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // SliverGrid that holds the buttons and their style
   Widget navigatorButtons() {
     return SliverGrid(
-        delegate:
-            SliverChildListDelegate.fixed(List<Widget>.generate(4, (index) {
-          return createButton(index);
-        })),
+        // create the 4 buttons that appear on the homepage
+        delegate: SliverChildListDelegate.fixed(
+          List<Widget>.generate(4, (nButton) {
+            return createButton(nButton);
+          }),
+        ),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: MediaQuery.of(context).size.width /
@@ -187,15 +146,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   // Function to create a styled button depending on the index passed
   // Also creates the text and on pressed function
-  Widget createButton(int index) {
+  Widget createButton(int nButton) {
+    HomeButton buttonToBeMade = HomeButton.values[nButton];
     Widget text;
     Function pressed;
     TextStyle buttonStyle = TextStyle(
         inherit: false,
         color: Colors.red,
         fontSize: MediaQuery.of(context).size.width / 30);
-    switch (index) {
-      case 0:
+
+    // set the specifics of the each button up
+    switch (buttonToBeMade) {
+      case HomeButton.photos:
         text = ListTile(
           leading: Icon(
             Icons.camera_alt_rounded,
@@ -211,7 +173,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         );
         pressed = () async {
           const fallbackUrl = "https://www.facebook.com/goldiegatorsphotobooth";
-          const fbProtocolUrl = "fb://page/?id=563316737106569";
+          const fbProtocolUrl = "fb://page/563316737106569";
           try {
             bool launched = await launch(fbProtocolUrl, forceSafariVC: false);
             if (!launched) await launch(fallbackUrl, forceSafariVC: false);
@@ -220,7 +182,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           }
         };
         break;
-      case 1:
+      case HomeButton.facebook:
         text = ListTile(
             leading: Image.asset(
               "assets/facebook.png",
@@ -234,22 +196,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               overflow: TextOverflow.visible,
             ));
         pressed = () async {
-          const fallbackUrl = "https://www.facebook.com/groups/242312270845000";
-          const fbProtocolUrl =
-              "intent://www.facebook.com/groups/242312270845000/#Intent;package=com.facebook.katana;scheme=https;end";
-          try {
-            bool launched = await launch(fbProtocolUrl,
-                forceSafariVC: false, forceWebView: false);
-            if (!launched)
-              await launch(fallbackUrl,
-                  forceSafariVC: false, forceWebView: false);
-          } catch (e) {
-            await launch(fallbackUrl,
-                forceSafariVC: false, forceWebView: false);
+          const url = "https://www.facebook.com/groups/242312270845000";
+          if (await canLaunch(url)) {
+            final bool nativeAppLaunchSucceeded = await launch(
+              url,
+              forceSafariVC: false,
+              universalLinksOnly: true,
+            );
+            if (!nativeAppLaunchSucceeded) {
+              await launch(
+                url,
+                forceSafariVC: true,
+              );
+            }
           }
         };
         break;
-      case 2:
+      case HomeButton.contacts:
         text = ListTile(
           leading: Icon(
             Icons.phone,
@@ -267,10 +230,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ContactPopup().openContactPop(context);
         };
         break;
-      case 3:
+      case HomeButton.dino:
         text = ListTile(
           leading: Icon(
-            Icons.restaurant_sharp,
+            Icons.restaurant_rounded,
             color: Colors.red,
             size: 35,
           ),
@@ -289,6 +252,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       default:
         errorReporter.captureMessage("More than 4 tiles created");
     }
+
     return Padding(
       padding: EdgeInsets.all(5),
       child: Container(
@@ -393,5 +357,3 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 }
-=======
->>>>>>> main
