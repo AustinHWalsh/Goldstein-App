@@ -46,8 +46,8 @@ class _CalendarPageState extends State<CalendarPage> {
               if (allEvents.isNotEmpty) {
                 _events = EventHelpers().groupEvents(allEvents);
                 if (MenuOpen.menuCalendar) {
-                  var dayEvents = _events[_openDay
-                      .subtract(Duration(hours: _openDay.hour))
+                  var dayEvents = _events[_controller.selectedDay
+                      .subtract(Duration(hours: 22))
                       .toLocal()];
                   _selectedEvents = dayEvents == null ? [] : dayEvents;
                   MenuOpen.menuCalendar = false;
@@ -82,8 +82,9 @@ class _CalendarPageState extends State<CalendarPage> {
           await Navigator.pushNamed(context, 'add_event');
           // show events after add_event page disappears
           setState(() {
-            var dayEvents = _events[
-                _openDay.subtract(Duration(hours: _openDay.hour)).toLocal()];
+            var dayEvents = _events[_controller.selectedDay
+                .subtract(Duration(hours: 22))
+                .toLocal()];
             _selectedEvents = dayEvents == null ? [] : dayEvents;
           });
           MenuOpen.adding = false;
@@ -185,6 +186,18 @@ class _CalendarPageState extends State<CalendarPage> {
                               note: event,
                             ),
                           ));
+                      setState(() {
+                        print(_events);
+                        print(_controller.selectedDay
+                            .subtract(Duration(hours: 22))
+                            .toLocal());
+                        var dayEvents = _events[_controller.selectedDay
+                            .subtract(Duration(hours: 22))
+                            .toLocal()];
+                        print(dayEvents);
+                        _selectedEvents = dayEvents == null ? [] : dayEvents;
+                      });
+                      print(_selectedEvents);
                     }
                   },
                 ),
