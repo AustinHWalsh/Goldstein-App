@@ -187,17 +187,11 @@ class _CalendarPageState extends State<CalendarPage> {
                             ),
                           ));
                       setState(() {
-                        print(_events);
-                        print(_controller.selectedDay
-                            .subtract(Duration(hours: 22))
-                            .toLocal());
                         var dayEvents = _events[_controller.selectedDay
                             .subtract(Duration(hours: 22))
                             .toLocal()];
-                        print(dayEvents);
                         _selectedEvents = dayEvents == null ? [] : dayEvents;
                       });
-                      print(_selectedEvents);
                     }
                   },
                 ),
